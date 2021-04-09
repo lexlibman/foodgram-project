@@ -16,7 +16,7 @@ services:
      - ./.env
 
   foodgram:
-    image: lexlibman/foodgram-project:latest
+    image: lexlibman/foodgram:latest
     restart: always
     volumes:
       - static_data:/code/static
