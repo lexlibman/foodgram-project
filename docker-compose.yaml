@@ -1,0 +1,41 @@
+version: '3.3'
+
+volumes:
+  postgres_data:
+  static_data:
+  media_data:
+  nginx_conf:
+
+services:
+  db:
+    image: postgres:13
+    restart: always
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    env_file:
+     - ./.env
+
+  foodgram:
+    image: lexlibman/foodgram:latest
+    restart: always
+    volumes:
+      - static_data:/code/static
+      - media_data:/code/media
+    env_file:
+      - ./.env
+    depends_on:
+      - db
+
+  nginx:
+    image: nginx:1.19.0-alpine
+    restart: always
+    volumes:
+      - static_data:/code/static
+      - media_data:/code/media
+      - nginx_conf:/etc/nginx/conf.d/
+    ports:
+      - 5000:80
+    depends_on:
+      - yamdb
+    env_file:
+      - ./.env
