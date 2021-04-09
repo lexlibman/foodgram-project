@@ -36,6 +36,6 @@ services:
     ports:
       - 5000:80
     depends_on:
-      - yamdb
+      - foodgram
     env_file:
       - ./.env
