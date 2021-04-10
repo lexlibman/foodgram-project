@@ -18,9 +18,6 @@ TAGS = ['breakfast', 'lunch', 'dinner']
 
 
 def index(request):
-    """
-    Display most recent `recipes.Recipe`, fitered with tags.
-    """
     tags = request.GET.getlist('tag', TAGS)
     all_tags = Tag.objects.all()
 
