@@ -34,10 +34,10 @@ The site is available on http://130.193.57.79
     ```
 - Create superuser
     ```
-    docker-compose -f docker-compose.yaml run --rm web python manage.py createsuperuser
+    docker-compose -f docker-compose.yaml run --rm foodgram python manage.py createsuperuser
     ```
 ### Optional
 - Load test data
     ```
-    docker-compose -f docker-compose.yaml run --rm web python manage.py loaddata fixtures.json
+    docker-compose -f docker-compose.yaml run --rm foodgram python manage.py loaddata fixtures.json
     ```
