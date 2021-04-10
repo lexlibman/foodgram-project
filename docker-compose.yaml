@@ -20,8 +20,8 @@ services:
     image: lexlibman/foodgram:latest
     restart: always
     volumes:
-      - static_data:/code/static
-      - media_data:/code/media
+      - static_volume:/code/static
+      - media_volume:/code/media
     env_file:
       - ./.env
     depends_on:
@@ -32,8 +32,8 @@ services:
     image: nginx:1.19.6-alpine
     restart: always
     volumes:
-      - static_data:/code/static
-      - media_data:/code/media
+      - static_volume:/code/static
+      - media_volume:/code/media
       - ./nginx/:/etc/nginx/conf.d
     ports:
       - 80:80
