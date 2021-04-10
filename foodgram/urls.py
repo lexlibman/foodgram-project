@@ -10,8 +10,8 @@ handler404 = 'foodgram.views.page_not_found'
 handler500 = 'foodgram.views.server_error'
 
 flatpages_urls = [
-    path('', flatpage, {'url': '/author/'}, name='about_author'),
-    path('', flatpage, {'url': '/tech/'}, name='about_tech'),
+    path('', flatpage, {'url': 'author/'}, name='about_author'),
+    path('', flatpage, {'url': 'tech/'}, name='about_tech'),
 ]
 
 
