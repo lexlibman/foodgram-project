@@ -1,10 +1,12 @@
-from django.core.files import File
+import io
+from wsgiref.util import FileWrapper
+
 from django.shortcuts import render, get_object_or_404, redirect
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
-from django.http import HttpResponse
+from django.http import FileResponse, HttpResponse
 from django.db.models import Count, Sum
 
 from .models import Recipe, Tag
@@ -207,11 +209,10 @@ def purchases_download(request):
         'recipe__ingredients__title', 'recipe__ingredients__dimension'
     ).annotate(amount=Sum('recipe__ingredients_amounts__quantity')).all()
 
-    pdf = generate_pdf(
-        'misc/shopListPDF.html', {'ingredients': ingredients}
-    )
+    pdf = generate_pdf('misc/shopListPDF.html', {'ingredients': ingredients})
 
-    pdf_file = File(open(pdf))
-    response = HttpResponse(pdf_file.read())
-    response['Content-Disposition'] = 'attachment'
+    f = open(pdf, "r")
+    response = HttpResponse(FileWrapper(f), content_type='application/pdf')
+    response['Content-Disposition'] = 'attachment; filename=shopping_list.pdf'
+    f.close()
     return response
