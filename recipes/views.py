@@ -197,7 +197,7 @@ def purchases(request):
 
 
 @login_required
-def purchases_download(request):
+def shop_list_download(request):
     text = ''
     list_ingredients = (
         Recipe.objects.filter(

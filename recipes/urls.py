@@ -27,16 +27,12 @@ recipes_urls = [
     ),
 ]
 
-purchases_urls = [
-    path('', views.purchases, name='purchases'),
-    path('download/', views.purchases_download, name='purchases_download'),
-]
-
 urlpatterns = [
     path('', views.index, name='index'),
     path('subscriptions/', views.subscriptions, name='subscriptions'),
     path('favorites/', views.favorites, name='favorites'),
-    path('purchases/', include(purchases_urls)),
+    path('purchases/', views.purchases, name='purchases'),
+    path('shoplist/', views.shop_list_download, name='shop_list_download'),
     path('recipe/', include(recipes_urls)),
     path('<str:username>/', views.profile_view, name='profile_view'),
 ]
