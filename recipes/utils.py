@@ -67,5 +67,6 @@ def generate_pdf(template_name, context):
         'encoding': "UTF-8",
         'no-outline': None
     }
-    html = get_template(template_name).render(context)
+    template = get_template(template_name)
+    html = template.render(context)
     return pdfkit.from_string(html, False, options=pdf_options)

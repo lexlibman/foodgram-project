@@ -1,11 +1,12 @@
 import io
 
+from django.core.files import File
 from django.shortcuts import render, get_object_or_404, redirect
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
-from django.http import FileResponse
+from django.http import FileResponse, HttpResponse
 from django.db.models import Count, Sum
 
 from .models import Recipe, Tag
@@ -212,8 +213,7 @@ def purchases_download(request):
         'misc/shopListPDF.html', {'ingredients': ingredients}
     )
 
-    return FileResponse(
-        io.BytesIO(pdf),
-        filename='ingredients.pdf',
-        as_attachment=True
-    )
+    pdf_file = File(open(pdf))
+    response = HttpResponse(pdf_file.read())
+    response['Content-Disposition'] = 'attachment'
+    return response
