@@ -1,5 +1,3 @@
-from wsgiref.util import FileWrapper
-
 from django.shortcuts import render, get_object_or_404, redirect
 from django.conf import settings
 from django.contrib.auth import get_user_model
@@ -10,7 +8,7 @@ from django.db.models import Count, Sum
 
 from .models import Recipe, Tag
 from .forms import RecipeForm
-from .utils import save_recipe, edit_recipe, generate_pdf
+from .utils import save_recipe, edit_recipe
 
 
 User = get_user_model()
@@ -200,18 +198,30 @@ def purchases(request):
 
 @login_required
 def purchases_download(request):
-    ingredients = request.user.purchases.select_related(
-        'recipe'
-    ).order_by(
-        'recipe__ingredients__title'
-    ).values(
-        'recipe__ingredients__title', 'recipe__ingredients__dimension'
-    ).annotate(amount=Sum('recipe__ingredients_amounts__quantity')).all()
+    text = ''
+    list_ingredients = (
+        Recipe.objects.filter(
+            in_purchases__user=request.user
+        ).order_by(
+            "ingredients__title"
+        ).values(
+            "ingredients__title",
+            "ingredients__dimension",
+        ).annotate(
+            amount=Sum("ingredients_amounts__quantity")
+        )
+    )
 
-    pdf = generate_pdf('misc/shopListPDF.html', {'ingredients': ingredients})
+    for ingredient in list_ingredients:
+        text += (
+            f"{ingredient['ingredients__title']} "
+            f"({ingredient['ingredients__dimension']})"
+            f" \u2014 {ingredient['amount']} \n"
+        )
 
-    f = open(pdf, "r")
-    response = HttpResponse(FileWrapper(f), content_type='application/pdf')
-    response['Content-Disposition'] = 'attachment; filename=shopping_list.pdf'
-    f.close()
+    filename = "ingredients.txt"
+    response = HttpResponse(text, content_type="text/plain")
+    response['Content-Disposition'] = 'attachment; filename={0}'.format(
+        filename
+    )
     return response
