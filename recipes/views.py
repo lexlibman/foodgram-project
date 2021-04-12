@@ -1,12 +1,10 @@
-import io
-
 from django.core.files import File
 from django.shortcuts import render, get_object_or_404, redirect
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
-from django.http import FileResponse, HttpResponse
+from django.http import HttpResponse
 from django.db.models import Count, Sum
 
 from .models import Recipe, Tag
