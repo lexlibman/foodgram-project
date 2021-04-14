@@ -111,7 +111,6 @@ def recipe_delete(request, recipe_id, slug):
 def profile_view(request, username):
     tags = request.GET.getlist('tag', TAGS)
     all_tags = Tag.objects.all()
-
     author = get_object_or_404(User, username=username)
     author_recipes = author.recipes.filter(
         tags__title__in=tags
