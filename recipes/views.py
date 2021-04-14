@@ -196,6 +196,6 @@ def purchases(request):
 
 
 @login_required
-def download_shop_list(request):
+def shop_list_download(request):
     shop_list = create_shop_list(request.session)
     return shop_list
