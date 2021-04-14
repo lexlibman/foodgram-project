@@ -9,7 +9,7 @@ Foodgram is a site that lets you create your own recipes and share them with oth
 You can also subscribe to recipe authors and add recipes to your shop-list 
 and download the list with all ingredients you need.
 
-The site is available on http://whatwasthat.ru
+The site is available on http://130.193.57.79
 
 
 ## Tech stack
