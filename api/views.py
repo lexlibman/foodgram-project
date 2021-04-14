@@ -1,13 +1,13 @@
 from django.shortcuts import get_object_or_404
-from rest_framework import filters, mixins, status, viewsets
+from rest_framework import filters, mixins, viewsets, status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from recipes.models import Ingredient
 
-from .models import Favorite, Subscription
-from .serializers import (FavoriteSerializer, IngredientSerializer,
-                          PurchaseSerializer, SubscriptionSerializer)
+from recipes.models import Ingredient
+from .models import Subscription, Favorite
+from .serializers import (IngredientSerializer, SubscriptionSerializer,
+                          FavoriteSerializer, PurchaseSerializer)
 
 
 class CreateDestroyViewSet(mixins.CreateModelMixin,
