@@ -1,7 +1,6 @@
-from django.urls import path, include
+from django.urls import include, path
 
 from . import views
-
 
 recipes_urls = [
     path('new/', views.recipe_new, name='recipe_new'),
@@ -27,16 +26,16 @@ recipes_urls = [
     ),
 ]
 
-purchases_urls = [
-    path('', views.purchases, name='purchases'),
-    path('download/', views.purchases_download, name='purchases_download'),
-]
-
 urlpatterns = [
     path('', views.index, name='index'),
     path('subscriptions/', views.subscriptions, name='subscriptions'),
     path('favorites/', views.favorites, name='favorites'),
-    path('purchases/', include(purchases_urls)),
+    path('purchases/', views.purchases, name='purchases'),
+    path(
+        'purchases/download/',
+        views.purchases_download,
+        name='purchases_download'
+    ),
     path('recipe/', include(recipes_urls)),
     path('<str:username>/', views.profile_view, name='profile_view'),
 ]
