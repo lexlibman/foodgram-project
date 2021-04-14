@@ -1,13 +1,11 @@
-import pdfkit
-
 from decimal import Decimal
 
 from django.db import transaction, IntegrityError
-from django.http import HttpResponseBadRequest
+from django.db.models import Sum
+from django.http import HttpResponseBadRequest, HttpResponse
 from django.shortcuts import get_object_or_404
-from django.template.loader import get_template
 
-from .models import Ingredient, RecipeIngredient
+from .models import Ingredient, RecipeIngredient, Recipe
 
 
 def get_ingredients(request):
@@ -57,16 +55,26 @@ def edit_recipe(request, form, instance):
         raise HttpResponseBadRequest
 
 
-def generate_pdf(template_name, context):
-    pdf_options = {
-        'page-size': 'Letter',
-        'margin-top': '0.75in',
-        'margin-right': '0.75in',
-        'margin-bottom': '0.75in',
-        'margin-left': '0.75in',
-        'encoding': "UTF-8",
-        'no-outline': None
-    }
-    template = get_template(template_name)
-    html = template.render(context)
-    return pdfkit.from_string(html, False, options=pdf_options)
+def get_purchase_recipes_from_session(session):
+    recipes_ids = session.get('recipe_ids')
+    if recipes_ids is not None:
+        recipes = Recipe.objects.filter(pk__in=recipes_ids)
+        return recipes
+
+
+def create_shop_list(session):
+    recipes = get_purchase_recipes_from_session(session)
+    ingredients = recipes.order_by('ingredients__title').values(
+        'ingredients__title',
+        'ingredients__dimension').annotate(
+        total_amount=Sum('ingredient_amounts__amount'))
+    filename = 'shopping_list.txt'
+    content = ''
+    for ingredient in ingredients:
+        string = (f'{ingredient["ingredients__title"]} '
+                  f'({ingredient["ingredients__dimension"]}) — '
+                  f'{ingredient["total_amount"]}')
+        content += string + '\n'
+    response = HttpResponse(content=content, content_type='text/plain')
+    response['Content-Disposition'] = f'attachment; filename={filename}'
+    return response

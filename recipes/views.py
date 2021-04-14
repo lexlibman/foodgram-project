@@ -3,12 +3,11 @@ from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
-from django.http import HttpResponse
-from django.db.models import Count, Sum
+from django.db.models import Count
 
 from .models import Recipe, Tag
 from .forms import RecipeForm
-from .utils import save_recipe, edit_recipe
+from .utils import save_recipe, edit_recipe, create_shop_list
 
 
 User = get_user_model()
@@ -197,31 +196,6 @@ def purchases(request):
 
 
 @login_required
-def shop_list_download(request):
-    text = ''
-    list_ingredients = (
-        Recipe.objects.filter(
-            in_purchases__user=request.user
-        ).order_by(
-            "ingredients__title"
-        ).values(
-            "ingredients__title",
-            "ingredients__dimension",
-        ).annotate(
-            amount=Sum("ingredients_amounts__quantity")
-        )
-    )
-
-    for ingredient in list_ingredients:
-        text += (
-            f"{ingredient['ingredients__title']} "
-            f"({ingredient['ingredients__dimension']})"
-            f" \u2014 {ingredient['amount']} \n"
-        )
-
-    filename = "ingredients.txt"
-    response = HttpResponse(text, content_type="text/plain")
-    response['Content-Disposition'] = 'attachment; filename={0}'.format(
-        filename
-    )
-    return response
+def download_shop_list(request):
+    shop_list = create_shop_list(request.session)
+    return shop_list
