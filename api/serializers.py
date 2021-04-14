@@ -26,7 +26,7 @@ class SubscriptionSerializer(CustomModelSerializer):
     def validate_author(self, value):
         user = self.context['request'].user
         if user.id == value:
-            raise ValidationError('Нельзя подписаться на самого себя')
+            raise ValidationError('Попытка подписаться на себя')
         return value
 
 

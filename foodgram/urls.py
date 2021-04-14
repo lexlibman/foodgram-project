@@ -1,9 +1,8 @@
-from django.contrib import admin
-from django.contrib.flatpages.views import flatpage
-from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
-
+from django.contrib import admin
+from django.contrib.flatpages.views import flatpage
+from django.urls import include, path
 
 handler400 = 'foodgram.views.page_bad_request'
 handler404 = 'foodgram.views.page_not_found'
