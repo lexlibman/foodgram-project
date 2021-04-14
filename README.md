@@ -1,7 +1,7 @@
 # Foodgram
 
 
-![foodgram-project](https://github.com/lexlibman/foodgram-project/workflows/Foodgram/badge.svg)
+![foodgram-project](https://github.com/lexlibman/foodgram-project/workflows/foodgram/badge.svg)
 
 
 ### Description

@@ -1,13 +1,16 @@
+import io
+
+from django.http import FileResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
-from django.db.models import Count
+from django.db.models import Count, Sum
 
 from .models import Recipe, Tag
 from .forms import RecipeForm
-from .utils import save_recipe, edit_recipe, create_shop_list
+from .utils import save_recipe, edit_recipe, generate_pdf
 
 
 User = get_user_model()
@@ -196,6 +199,21 @@ def purchases(request):
 
 
 @login_required
-def shop_list_download(request):
-    shop_list = create_shop_list(request.session)
-    return shop_list
+def purchases_download(request):
+    ingredients = request.user.purchases.select_related(
+        'recipe'
+    ).order_by(
+        'recipe__ingredients__title'
+    ).values(
+        'recipe__ingredients__title', 'recipe__ingredients__dimension'
+    ).annotate(amount=Sum('recipe__ingredients_amounts__quantity')).all()
+
+    pdf = generate_pdf(
+        'misc/shopListPDF.html', {'ingredients': ingredients}
+    )
+
+    return FileResponse(
+        io.BytesIO(pdf),
+        filename='ingredients.pdf',
+        as_attachment=True
+    )
