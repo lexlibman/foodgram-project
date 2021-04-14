@@ -1,6 +1,4 @@
-import io
-
-from django.http import FileResponse, HttpResponse
+from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.conf import settings
 from django.contrib.auth import get_user_model
@@ -10,7 +8,7 @@ from django.db.models import Count, Sum
 
 from .models import Recipe, Tag
 from .forms import RecipeForm
-from .utils import save_recipe, edit_recipe, generate_pdf
+from .utils import save_recipe, edit_recipe
 
 
 User = get_user_model()
