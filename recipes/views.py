@@ -1,6 +1,6 @@
 import io
 
-from django.http import FileResponse
+from django.http import FileResponse, HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.conf import settings
 from django.contrib.auth import get_user_model
@@ -208,12 +208,15 @@ def purchases_download(request):
         'recipe__ingredients__title', 'recipe__ingredients__dimension'
     ).annotate(amount=Sum('recipe__ingredients_amounts__quantity')).all()
 
-    pdf = generate_pdf(
-        'misc/shopListPDF.html', {'ingredients': ingredients}
-    )
+    file_text = ''
 
-    return FileResponse(
-        io.BytesIO(pdf),
-        filename='ingredients.pdf',
-        as_attachment=True
+    for item in ingredients:
+        title, dimension, quantity = item.values()
+        line = f'{title.capitalize()} ({dimension}) - {quantity}'
+        file_text += line + '\n'
+
+    response = HttpResponse(
+        file_text, content_type='application/text charset=utf-8'
     )
+    response['Content-Disposition'] = 'attachment; filename="ShoppingList.txt"'
+    return response
