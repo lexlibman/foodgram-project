@@ -1,6 +1,6 @@
 from decimal import Decimal
 
-from django.db import transaction, IntegrityError
+from django.db import IntegrityError, transaction
 from django.http import HttpResponseBadRequest
 from django.shortcuts import get_object_or_404
 

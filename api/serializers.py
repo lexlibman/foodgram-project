@@ -1,9 +1,9 @@
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
-
 from recipes.models import Ingredient
-from .models import Subscription, Favorite, Purchase
+
+from .models import Favorite, Purchase, Subscription
 
 
 class CustomModelSerializer(serializers.ModelSerializer):
