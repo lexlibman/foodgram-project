@@ -6,6 +6,7 @@ from rest_framework.response import Response
 from recipes.models import Ingredient
 
 from .models import Favorite, Subscription
+from .permissions import IsOwnerOrAdmin
 from .serializers import (FavoriteSerializer, IngredientSerializer,
                           PurchaseSerializer, SubscriptionSerializer)
 
@@ -44,14 +45,14 @@ class IngredientViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
 class SubscriptionViewSet(CreateDestroyViewSet):
     queryset = Subscription.objects.all()
     serializer_class = SubscriptionSerializer
-    permission_classes = (IsAuthenticated, )
+    permission_classes = (IsAuthenticated, IsOwnerOrAdmin,)
     lookup_field = 'author'
 
 
 class FavoriteViewSet(CreateDestroyViewSet):
     queryset = Favorite.objects.all()
     serializer_class = FavoriteSerializer
-    permission_classes = (IsAuthenticated, )
+    permission_classes = (IsAuthenticated, IsOwnerOrAdmin,)
     lookup_field = 'recipe'
 
 
