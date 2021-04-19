@@ -1,7 +1,7 @@
 from django import template
 from django.contrib.auth import get_user_model
 
-from api.models import Favorite, Purchase, Subscription
+from recipes.models import Favorite, Purchase, Subscription
 
 register = template.Library()
 User = get_user_model()
@@ -14,29 +14,30 @@ def addclass(field, css):
 
 @register.filter
 def is_subscribed_to(user, author):
-    return Subscription.objects.filter(user=user, author=author).exists()
+    return Subscription.objects.filter(user=user, author=author)
 
 
 @register.filter
 def is_favored_by(recipe, user):
-    return Favorite.objects.filter(recipe=recipe, user=user).exists()
+    return Favorite.objects.filter(recipe=recipe, user=user)
 
 
 @register.filter
 def is_in_shop_list_of(recipe, user):
-    return Purchase.objects.filter(recipe=recipe, user=user).exists()
+    return Purchase.objects.filter(recipe=recipe, user=user)
 
 
 @register.filter
 def declenize(number, args):
     args = [arg.strip() for arg in args.split(',')]
     last_digit = int(number) % 10
+    if 10 < int(number) < 15:
+        return f'{number} {args[2]}'
     if last_digit == 1:
         return f'{number} {args[0]}'
-    elif last_digit > 1 and last_digit < 5:
+    if 1 < last_digit < 5:
         return f'{number} {args[1]}'
-    elif last_digit > 4 or last_digit == 0:
-        return f'{number} {args[2]}'
+    return f'{number} {args[2]}'
 
 
 @register.filter

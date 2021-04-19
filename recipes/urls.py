@@ -1,6 +1,19 @@
 from django.urls import include, path
+from rest_framework.routers import DefaultRouter
 
-from . import views
+from recipes.views.api_views import (FavoriteViewSet, IngredientViewSet, PurchaseViewSet,
+                                     SubscriptionViewSet)
+from recipes.views import views
+
+router = DefaultRouter()
+router.register('ingredients', IngredientViewSet, basename='ingredients')
+router.register(
+    'subscriptions',
+    SubscriptionViewSet,
+    basename='subscriptions',
+)
+router.register('favorites', FavoriteViewSet, basename='favorites')
+router.register('purchases', PurchaseViewSet, basename='purchases')
 
 recipes_urls = [
     path('new/', views.recipe_new, name='recipe_new'),
@@ -28,6 +41,7 @@ recipes_urls = [
 
 urlpatterns = [
     path('', views.index, name='index'),
+    path('api/v1/', include(router.urls)),
     path('subscriptions/', views.subscriptions, name='subscriptions'),
     path('favorites/', views.favorites, name='favorites'),
     path('purchases/', views.purchases, name='purchases'),

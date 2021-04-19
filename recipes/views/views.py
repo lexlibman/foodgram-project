@@ -6,9 +6,9 @@ from django.db.models import Count, Sum
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 
-from .forms import RecipeForm
-from .models import Recipe, Tag
-from .utils import edit_recipe, save_recipe
+from recipes.forms import RecipeForm
+from recipes.models import Recipe, Tag
+from recipes.utils import edit_recipe, save_recipe
 
 User = get_user_model()
 TAGS = ['breakfast', 'lunch', 'dinner']
