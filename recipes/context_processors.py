@@ -4,5 +4,5 @@ def shop_list_size(request):
     else:
         count = 0
     return {
-        "shop_list_size": count
+        'shop_list_size': count
     }

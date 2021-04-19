@@ -1,4 +1,4 @@
-from django.shortcuts import get_object_or_404
+from rest_framework.generics import get_object_or_404
 from rest_framework import filters, mixins, status, viewsets
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -37,7 +37,7 @@ class IngredientViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
     queryset = Ingredient.objects.all()
     serializer_class = IngredientSerializer
     filter_backends = (filters.SearchFilter, )
-    search_fields = ('^title',)
+    search_fields = ('title',)
 
 
 class SubscriptionViewSet(CreateDestroyViewSet):

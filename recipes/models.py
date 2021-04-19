@@ -159,7 +159,17 @@ class Subscription(models.Model):
     )
 
     class Meta:
-        unique_together = ('user', 'author')
+        ordering = ['user', 'author']
+        constraints = [
+            models.UniqueConstraint(
+                fields=['user', 'author'],
+                name='unique together'
+            ),
+            models.CheckConstraint(
+                check=~models.Q(user=models.F('author')),
+                name='disable self following'
+            ),
+        ]
         verbose_name = 'Подписка'
         verbose_name_plural = 'Подписки'
 

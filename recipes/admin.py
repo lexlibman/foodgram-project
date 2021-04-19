@@ -30,11 +30,13 @@ class RecipeAdmin(admin.ModelAdmin):
     def get_favorite_count(self, obj):
         return obj.favorite_count
 
+    get_favorite_count.short_description = 'Счетчик в избранном'
+
 
 @admin.register(models.Ingredient)
 class IngredientAdmin(admin.ModelAdmin):
     list_display = ('title', 'dimension')
-    search_fields = ('^title', )
+    search_fields = ('title', )
 
 
 @admin.register(models.Tag)
