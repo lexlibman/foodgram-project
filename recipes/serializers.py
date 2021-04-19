@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
-from .models import Favorite, Purchase, Subscription, Ingredient
+from .models import Favorite, Ingredient, Purchase, Subscription
 
 
 class CustomModelSerializer(serializers.ModelSerializer):
