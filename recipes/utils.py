@@ -33,7 +33,7 @@ def save_recipe(request, form):
                     ingredient = Ingredient.objects.get(title=name)
                 except Ingredient.DoesNotExist:
                     raise forms.ValidationError(
-                        'Такого ингредиента нет в базе данных('
+                        'Ингредиента нет в базе данных('
                     )
                 objs.append(
                     RecipeIngredient(

@@ -111,9 +111,14 @@ def profile_view(request, username):
     if not tags:
         return redirect(f"{reverse('profile_view', args=[author.username])}"
                         f"{turn_on_tags()}")
-    author_recipes = author.recipes.filter(
-        tags__title__in=tags
-    ).prefetch_related('tags').distinct()
+    author_recipes = Recipe.objects.filter(
+        author=author
+    ).get_additional_attributes(
+        request.user,
+        tags
+    ).distinct().select_related(
+        'author'
+    )
 
     paginator, page_number = create_paginator(
         author_recipes,
