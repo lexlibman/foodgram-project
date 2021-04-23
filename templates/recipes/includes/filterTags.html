@@ -1,9 +1,9 @@
 <ul class="tags">
   {% for tag in request.tags %}
     <li class="tags__item">
-        <a id="{{ tag.object.id }}" class="tags__checkbox tags__checkbox_style_{{ tag.object.checkbox_style }}
+        <a id="{{ tag.object.id }}" class="tags__checkbox tags__checkbox_style_{{ tag.object.color }}
         {% if tag.active %} tags__checkbox_active {% endif %}" href="{{ tag.url }}"></a>
-        <span class="tags__label">{{ tag.object.title }}</span>
+        <span class="tags__label">{{ tag.object.display_name }}</span>
     </li>
   {% endfor %}
 </ul>
