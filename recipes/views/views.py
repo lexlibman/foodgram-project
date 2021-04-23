@@ -1,43 +1,37 @@
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
-from django.core.paginator import Paginator
 from django.db.models import Count, Sum
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
+from django.urls import reverse
 
 from recipes.forms import RecipeForm
-from recipes.models import Recipe, Tag, RecipeIngredient
+from recipes.models import Recipe
+from recipes.utils import edit_recipe, save_recipe, create_paginator, turn_on_tags
 
 User = get_user_model()
-TAGS = ['breakfast', 'lunch', 'dinner']
 
 
 def index(request):
-    tags = request.GET.getlist('tag', TAGS)
-    all_tags = Tag.objects.all()
+    tags = request.existing_tags
+    if not tags:
+        return redirect(f"{reverse('index')}{turn_on_tags()}")
 
-    recipes = Recipe.objects.filter(
-        tags__title__in=tags
-    ).select_related(
+    recipes = Recipe.objects.get_additional_attributes(
+        request.user,
+        tags
+    ).distinct().select_related(
         'author'
-    ).prefetch_related(
-        'tags'
-    ).distinct()
+    )
 
-    paginator = Paginator(recipes, settings.PAGINATION_PAGE_SIZE)
-    page_number = request.GET.get('page')
+    paginator, page_number = create_paginator(recipes, settings.PAGINATION_PAGE_SIZE, request)
     page = paginator.get_page(page_number)
 
     return render(
         request,
         'recipes/index.html',
-        {
-            'page': page,
-            'paginator': paginator,
-            'tags': tags,
-            'all_tags': all_tags,
-        }
+        {'page': page},
     )
 
 
@@ -61,8 +55,7 @@ def recipe_view_slug(request, recipe_id, slug):
 def recipe_new(request):
     form = RecipeForm(request.POST or None, files=request.FILES or None)
     if form.is_valid():
-        form.instance.author = request.user
-        recipe = form.save_m2m()
+        recipe = save_recipe(request, form)
 
         return redirect(
             'recipe_view_slug', recipe_id=recipe.id, slug=recipe.slug
@@ -87,9 +80,7 @@ def recipe_edit(request, recipe_id, slug):
         instance=recipe
     )
     if form.is_valid():
-        RecipeIngredient.objects.filter(recipe).delete()
-        form.instance.author = request.user
-        recipe = form.save_m2m()
+        edit_recipe(request, form, instance=recipe)
         return redirect(
             'recipe_view_slug', recipe_id=recipe.id, slug=recipe.slug
         )
@@ -110,27 +101,25 @@ def recipe_delete(request, recipe_id, slug):
 
 
 def profile_view(request, username):
-    tags = request.GET.getlist('tag', TAGS)
-    all_tags = Tag.objects.all()
     author = get_object_or_404(User, username=username)
+    tags = request.existing_tags
+    if not tags:
+        return redirect(f"{reverse('profile_view', args=[author.username])}{turn_on_tags()}")
     author_recipes = author.recipes.filter(
         tags__title__in=tags
     ).prefetch_related('tags').distinct()
 
-    paginator = Paginator(author_recipes, settings.PAGINATION_PAGE_SIZE)
-    page_number = request.GET.get('page')
+    paginator, page_number = create_paginator(author_recipes, settings.PAGINATION_PAGE_SIZE, request)
+    if page_number and int(page_number) not in range(1, paginator.num_pages + 1):
+        return redirect(
+            f"{reverse('profile', args=[author.username])}{request.current_filter}"
+        )
     page = paginator.get_page(page_number)
 
     return render(
         request,
         'recipes/authorRecipe.html',
-        {
-            'author': author,
-            'page': page,
-            'paginator': paginator,
-            'tags': tags,
-            'all_tags': all_tags,
-        }
+        {'author': author, 'page': page}
     )
 
 
@@ -142,24 +131,21 @@ def subscriptions(request):
         'recipes'
     ).annotate(recipe_count=Count('recipes')).order_by('username')
 
-    paginator = Paginator(authors, settings.PAGINATION_PAGE_SIZE)
-    page_number = request.GET.get('page')
+    paginator, page_number = create_paginator(authors, settings.PAGINATOR_ITEMS, request)
     page = paginator.get_page(page_number)
 
     return render(
         request,
         'recipes/myFollow.html',
-        {
-            'page': page,
-            'paginator': paginator,
-        }
+        {'page': page},
     )
 
 
 @login_required
 def favorites(request):
-    tags = request.GET.getlist('tag', TAGS)
-    all_tags = Tag.objects.all()
+    tags = request.existing_tags
+    if not tags:
+        return redirect(f"{reverse('favorites')}{turn_on_tags()}")
 
     recipes = Recipe.objects.filter(
         favored_by__user=request.user,
@@ -170,19 +156,15 @@ def favorites(request):
         'tags'
     ).distinct()
 
-    paginator = Paginator(recipes, settings.PAGINATION_PAGE_SIZE)
-    page_number = request.GET.get('page')
+    paginator, page_number = create_paginator(recipes, settings.PAGINATION_PAGE_SIZE, request)
+    if page_number and int(page_number) not in range(1, paginator.num_pages + 1):
+        return redirect(f"{reverse('favorites_index')}{request.current_filter}")
     page = paginator.get_page(page_number)
 
     return render(
         request,
         'recipes/favorite.html',
-        {
-            'page': page,
-            'paginator': paginator,
-            'tags': tags,
-            'all_tags': all_tags,
-        }
+        {'page': page},
     )
 
 
