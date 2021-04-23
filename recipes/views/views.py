@@ -216,7 +216,7 @@ def purchases_download(request):
     for item in ingredients:
         title, dimension, quantity = item.values()
         line = f'{title.capitalize()} ({dimension}) - {quantity}'
-        file_text += line + '\n'
+        file_text += line + '\r\n'
 
     response = HttpResponse(
         file_text, content_type='application/text charset=utf-8'
