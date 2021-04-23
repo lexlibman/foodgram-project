@@ -8,7 +8,8 @@ from django.urls import reverse
 
 from recipes.forms import RecipeForm
 from recipes.models import Recipe
-from recipes.utils import edit_recipe, save_recipe, create_paginator, turn_on_tags
+from recipes.utils import (edit_recipe, save_recipe,
+                           create_paginator, turn_on_tags)
 
 User = get_user_model()
 
@@ -25,7 +26,11 @@ def index(request):
         'author'
     )
 
-    paginator, page_number = create_paginator(recipes, settings.PAGINATION_PAGE_SIZE, request)
+    paginator, page_number = create_paginator(
+        recipes,
+        settings.PAGINATION_PAGE_SIZE,
+        request
+    )
     page = paginator.get_page(page_number)
 
     return render(
@@ -104,16 +109,21 @@ def profile_view(request, username):
     author = get_object_or_404(User, username=username)
     tags = request.existing_tags
     if not tags:
-        return redirect(f"{reverse('profile_view', args=[author.username])}{turn_on_tags()}")
+        return redirect(f"{reverse('profile_view', args=[author.username])}"
+                        f"{turn_on_tags()}")
     author_recipes = author.recipes.filter(
         tags__title__in=tags
     ).prefetch_related('tags').distinct()
 
-    paginator, page_number = create_paginator(author_recipes, settings.PAGINATION_PAGE_SIZE, request)
-    if page_number and int(page_number) not in range(1, paginator.num_pages + 1):
-        return redirect(
-            f"{reverse('profile', args=[author.username])}{request.current_filter}"
-        )
+    paginator, page_number = create_paginator(
+        author_recipes,
+        settings.PAGINATION_PAGE_SIZE,
+        request
+    )
+    if (page_number
+            and int(page_number) not in range(1, paginator.num_pages + 1)):
+        return redirect(f"{reverse('profile', args=[author.username])}"
+                        f"{request.current_filter}")
     page = paginator.get_page(page_number)
 
     return render(
@@ -131,7 +141,11 @@ def subscriptions(request):
         'recipes'
     ).annotate(recipe_count=Count('recipes')).order_by('username')
 
-    paginator, page_number = create_paginator(authors, settings.PAGINATOR_ITEMS, request)
+    paginator, page_number = create_paginator(
+        authors,
+        settings.PAGINATOR_ITEMS,
+        request
+    )
     page = paginator.get_page(page_number)
 
     return render(
@@ -156,9 +170,18 @@ def favorites(request):
         'tags'
     ).distinct()
 
-    paginator, page_number = create_paginator(recipes, settings.PAGINATION_PAGE_SIZE, request)
-    if page_number and int(page_number) not in range(1, paginator.num_pages + 1):
-        return redirect(f"{reverse('favorites_index')}{request.current_filter}")
+    paginator, page_number = create_paginator(
+        recipes,
+        settings.PAGINATION_PAGE_SIZE,
+        request
+    )
+    if page_number and int(page_number) not in range(
+            1,
+            paginator.num_pages + 1
+    ):
+        return redirect(
+            f"{reverse('favorites_index')}{request.current_filter}"
+        )
     page = paginator.get_page(page_number)
 
     return render(

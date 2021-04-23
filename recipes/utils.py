@@ -32,7 +32,9 @@ def save_recipe(request, form):
                 try:
                     ingredient = Ingredient.objects.get(title=name)
                 except Ingredient.DoesNotExist:
-                    raise forms.ValidationError('Такого ингредиента нет в базе данных(')
+                    raise forms.ValidationError(
+                        'Такого ингредиента нет в базе данных('
+                    )
                 objs.append(
                     RecipeIngredient(
                         recipe=recipe,
@@ -65,5 +67,7 @@ def create_paginator(items_list, number_of_items, request):
 
 
 def turn_on_tags():
-    get_param = f"?filter={'&filter='.join(Tag.objects.values_list('title', flat=True))}"
-    return get_param
+    return (
+        f"?filter="
+        f"{'&filter='.join(Tag.objects.values_list('title', flat=True))}"
+    )

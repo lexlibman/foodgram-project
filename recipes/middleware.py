@@ -11,10 +11,12 @@ class Tags:
         existing_tags = Tag.objects.filter(title__in=existing_filters)
         for tag in self.tags:
             filters = existing_filters.copy()
-            if tag['object'].title in existing_filters and len(existing_filters) > 1:
+            if (tag['object'].title in existing_filters
+                    and len(existing_filters) > 1):
                 tag['active'] = True
                 filters.remove(tag['object'].title)
-            elif tag['object'].title in existing_filters and len(existing_filters) == 1:
+            elif (tag['object'].title in existing_filters
+                    and len(existing_filters) == 1):
                 tag['active'] = True
             else:
                 tag['active'] = False
