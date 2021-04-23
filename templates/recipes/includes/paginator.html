@@ -3,7 +3,7 @@
 <nav class="pagination" aria-label="Search results pages">
   <ul class="pagination__container">
     {% if page.has_previous %}
-      <li class="pagination__item"><a class="pagination__link link" href="?page={{ page.previous_page_number }}{{ tags|tags_to_url_params }}"><span class="icon-left"></span></a></li>
+      <li class="pagination__item"><a class="pagination__link link" href="?page={{ page.previous_page_number }}"><span class="icon-left"></span></a></li>
     {% endif %}
     {% for i in paginator.page_range %}
       {% if page.number == i %}
