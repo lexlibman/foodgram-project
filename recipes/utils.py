@@ -42,10 +42,7 @@ def save_recipe(request, form):
                         quantity=Decimal(quantity.replace(',', '.'))
                     )
                 )
-            RecipeIngredient.objects.filter(recipe).delete()
             RecipeIngredient.objects.bulk_create(objs)
-
-            form.save_m2m()
             return recipe
     except IntegrityError:
         raise HttpResponseBadRequest

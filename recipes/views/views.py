@@ -143,7 +143,7 @@ def subscriptions(request):
 
     paginator, page_number = create_paginator(
         authors,
-        settings.PAGINATOR_ITEMS,
+        settings.PAGINATION_PAGE_SIZE,
         request
     )
     page = paginator.get_page(page_number)
@@ -160,20 +160,19 @@ def favorites(request):
     tags = request.existing_tags
     if not tags:
         return redirect(f"{reverse('favorites')}{turn_on_tags()}")
-
     recipes = Recipe.objects.filter(
-        favored_by__user=request.user,
-        tags__title__in=tags
-    ).select_related(
+        favored_by__user=request.user
+    ).get_additional_attributes(
+        request.user,
+        tags
+    ).distinct().select_related(
         'author'
-    ).prefetch_related(
-        'tags'
-    ).distinct()
+    )
 
     paginator, page_number = create_paginator(
         recipes,
         settings.PAGINATION_PAGE_SIZE,
-        request
+        request,
     )
     if page_number and int(page_number) not in range(
             1,
