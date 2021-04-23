@@ -7,8 +7,7 @@ from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 
 from recipes.forms import RecipeForm
-from recipes.models import Recipe, Tag
-from recipes.utils import edit_recipe, save_recipe
+from recipes.models import Recipe, Tag, RecipeIngredient
 
 User = get_user_model()
 TAGS = ['breakfast', 'lunch', 'dinner']
@@ -62,7 +61,8 @@ def recipe_view_slug(request, recipe_id, slug):
 def recipe_new(request):
     form = RecipeForm(request.POST or None, files=request.FILES or None)
     if form.is_valid():
-        recipe = save_recipe(request, form)
+        form.instance.author = request.user
+        recipe = form.save_m2m()
 
         return redirect(
             'recipe_view_slug', recipe_id=recipe.id, slug=recipe.slug
@@ -87,7 +87,9 @@ def recipe_edit(request, recipe_id, slug):
         instance=recipe
     )
     if form.is_valid():
-        edit_recipe(request, form, instance=recipe)
+        RecipeIngredient.objects.filter(recipe).delete()
+        form.instance.author = request.user
+        recipe = form.save_m2m()
         return redirect(
             'recipe_view_slug', recipe_id=recipe.id, slug=recipe.slug
         )

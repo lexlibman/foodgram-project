@@ -1,6 +1,6 @@
 from autoslug import AutoSlugField
 from django.contrib.auth import get_user_model
-from django.core.validators import MinValueValidator
+from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 
 User = get_user_model()
@@ -70,7 +70,10 @@ class Recipe(models.Model):
         through='RecipeIngredient',
         verbose_name='Ингредиент'
     )
-    cooking_time = models.PositiveSmallIntegerField('Время приготовления')
+    cooking_time = models.PositiveSmallIntegerField(
+        'Время приготовления',
+        validators=[MinValueValidator(1), MaxValueValidator(600)],
+    )
     slug = AutoSlugField(populate_from='title', allow_unicode=True)
     tags = models.ManyToManyField(
         'Tag',
@@ -104,7 +107,7 @@ class RecipeIngredient(models.Model):
     quantity = models.DecimalField(
         max_digits=6,
         decimal_places=1,
-        validators=[MinValueValidator(1)]
+        validators=[MinValueValidator(0.1), MaxValueValidator(10000)]
     )
 
     class Meta:

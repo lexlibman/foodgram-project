@@ -1,6 +1,6 @@
 def shop_list_size(request):
     if request.user.is_authenticated:
-        count = request.user.purchases.all().count()
+        count = request.user.purchases.count()
     else:
         count = 0
     return {
