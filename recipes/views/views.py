@@ -31,6 +31,9 @@ def index(request):
         settings.PAGINATION_PAGE_SIZE,
         request
     )
+    if (page_number
+            and int(page_number) not in range(1, paginator.num_pages + 1)):
+        return redirect(f"{reverse('index')}{request.current_filter}")
     page = paginator.get_page(page_number)
 
     return render(
@@ -151,6 +154,9 @@ def subscriptions(request):
         settings.PAGINATION_PAGE_SIZE,
         request
     )
+    if (page_number
+            and int(page_number) not in range(1, paginator.num_pages + 1)):
+        return redirect(reverse('subscriptions'))
     page = paginator.get_page(page_number)
 
     return render(
