@@ -95,7 +95,7 @@ def recipe_edit(request, recipe_id, slug):
 
     return render(
         request,
-        'formRecipe.html',
+        'recipes/formRecipe.html',
         {'form': form, 'recipe': recipe}
     )
 

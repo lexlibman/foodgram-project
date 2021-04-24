@@ -1,7 +1,7 @@
 from django import template
 from django.contrib.auth import get_user_model
 
-from recipes.models import Recipe
+from recipes.models import Subscription, Purchase, Favorite
 
 register = template.Library()
 User = get_user_model()
@@ -14,17 +14,17 @@ def addclass(field, css):
 
 @register.filter
 def is_subscribed_to(user, author):
-    return Recipe.objects.subscription.filter(user=user, author=author)
+    return Subscription.objects.filter(user=user, author=author)
 
 
 @register.filter
 def is_favored_by(recipe, user):
-    return Recipe.objects.favorite.filter(recipe=recipe, user=user)
+    return Favorite.objects.filter(recipe=recipe, user=user)
 
 
 @register.filter
 def is_in_shop_list_of(recipe, user):
-    return Recipe.objects.purchase.filter(recipe=recipe, user=user)
+    return Purchase.objects.filter(recipe=recipe, user=user)
 
 
 @register.filter
