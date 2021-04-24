@@ -38,7 +38,7 @@ def index(request):
 
     return render(
         request,
-        'recipes/index.html',
+        'index.html',
         {'page': page},
     )
 
@@ -56,7 +56,7 @@ def recipe_view_slug(request, recipe_id, slug):
         slug=slug
     )
 
-    return render(request, 'recipes/singlePage.html', {'recipe': recipe})
+    return render(request, 'singlePage.html', {'recipe': recipe})
 
 
 @login_required
@@ -69,7 +69,7 @@ def recipe_new(request):
             'recipe_view_slug', recipe_id=recipe.id, slug=recipe.slug
         )
 
-    return render(request, 'recipes/formRecipe.html', {'form': form})
+    return render(request, 'formRecipe.html', {'form': form})
 
 
 @login_required
@@ -136,7 +136,7 @@ def profile_view(request, username):
 
     return render(
         request,
-        'recipes/authorRecipe.html',
+        'authorRecipe.html',
         {'author': author, 'page': page}
     )
 
@@ -161,7 +161,7 @@ def subscriptions(request):
 
     return render(
         request,
-        'recipes/myFollow.html',
+        'myFollow.html',
         {'page': page},
     )
 
@@ -196,7 +196,7 @@ def favorites(request):
 
     return render(
         request,
-        'recipes/favorite.html',
+        'favorite.html',
         {'page': page},
     )
 
@@ -206,7 +206,7 @@ def purchases(request):
     recipes = request.user.purchases.all()
     return render(
         request,
-        'recipes/shopList.html',
+        'shopList.html',
         {'recipes': recipes},
     )
 

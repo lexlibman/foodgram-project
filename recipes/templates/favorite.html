@@ -1,15 +1,15 @@
-{% extends '../base/base.html' %}
+{% extends 'base.html' %}
 
 {% load static %}
 
-{% block title %}Рецепты{% endblock %}
+{% block title %}Избранное{% endblock %}
 {% block css %}
   <link rel="stylesheet" href="{% static 'pages/index.css' %}">
 {% endblock %}
 
 {% block content %}
   <div class="main__header">
-    <h1 class="main__title">Рецепты</h1>
+    <h1 class="main__title">Избранное</h1>
     {% include './includes/filterTags.html' %}
   </div>
 
@@ -20,8 +20,9 @@
   </div>
 
   {% if page.has_other_pages %}
-    {% include './includes/paginator.html' with page=page paginator=paginator %}
+    {% include './includes/paginatior.html' with page=page paginator=paginator %}
   {% endif %}
+
 {% endblock %}
 
 {% block js %}
@@ -32,10 +33,5 @@
   <script src="{% static 'js/components/CardList.js' %}"></script>
   <script src="{% static 'js/components/Header.js' %}"></script>
   <script src="{% static 'js/api/Api.js' %}"></script>
-
-  {% if user.is_authenticated %}
-    <script src="{% static 'js/indexAuth.js' %}"></script>
-  {% else %}
-    <script src="{% static 'js/indexNotAuth.js' %}"></script>
-  {% endif %}
-{% endblock %}
+  <script src="{% static 'js/favorite.js' %}"></script>
+{% endblock js %}

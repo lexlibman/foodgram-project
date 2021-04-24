@@ -1,15 +1,15 @@
-{% extends '../base/base.html' %}
+{% extends 'base.html' %}
 
 {% load static %}
 
-{% block title %}Сброс пароля{% endblock %}
+{% block title %}Выход{% endblock %}
 {% block css %}
   <link rel="stylesheet" href="{% static 'pages/index.css' %}">
 {% endblock %}
 
 {% block content %}
   <div class="custom-center-block">
-    <p class="custom-text-block">Сброс пароля прошел успешно!</p>
+    <p class="custom-text-block">Вы вышли из своей учетой записи</p>
     <div class="custom-button-block">
       <a class="button button_style_blue" href="{% url 'index' %}">Перейти на главную</a>
     </div>
