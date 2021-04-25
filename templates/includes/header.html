@@ -8,17 +8,19 @@
                 <li class="nav__item {% if 'subscriptions' in url_name %}nav__item_active{% endif %}"><a href="{% url 'subscriptions' %}" class="nav__link link">Мои подписки</a></li>
                 <li class="nav__item {% if 'new' in url_name %}nav__item_active{% endif %}"><a href="{% url 'recipe_new' %}" class="nav__link link">Создать рецепт</a></li>
                 <li class="nav__item {% if 'favorites' in url_name %}nav__item_active{% endif %}"><a href="{% url 'favorites' %}" class="nav__link link">Избранное</a></li>
-                <li class="nav__item {% if 'purchases' in url_name %}nav__item_active{% endif %}"><a href="{% url 'purchases' %}" class="nav__link link">Список покупок</a> <span class="badge badge_style_blue nav__badge" id="counter">{{ shop_list_size }}</span></li>
+                <li class="nav__item {% if 'purchases' in url_name %}nav__item_active{% endif %}"><a href="{% url 'purchases' %}" class="nav__link link">Список покупок</a> <span class="badge badge_style_blue nav__badge" id="counter">{% if shop_list_size %}{{ shop_list_size }}{% endif %}</span></li>
               {% endif %}
             {% endwith %}
           </ul>
           <ul class="nav__items list">
             {% if user.is_authenticated %}
-              <li class="nav__item"><a href="{% url 'password_change' %}" class="nav__link link">Изменить пароль</a></li>
+              <li class="nav__item {% if url_name == 'password_change' %} nav__item_active {% endif %}">
+                  <a href="{% url 'password_change' %}" class="nav__link link">Изменить пароль</a></li>
               <li class="nav__item"><a href="{% url 'logout' %}" class="nav__link link">Выход</a></li>
             {% else %}
-              <li class="nav__item"><a href="{% url 'login' %}" class="nav__link link">Войти</a></li>
-              <li class="nav__item"><a href="{% url 'signup' %}" class="button button_style_blue">Создать аккаунт</a></li>
+              <li class="nav__item {% if url_name == 'login' %} nav__item_active {% endif %}">
+                  <a href="{% url 'login' %}" class="nav__link link">Войти</a></li>
+              <li class="nav__item"><a href="{% url 'signup' %}"><button class="button button_style_blue">Создать аккаунт</button></a></li>
             {% endif %}
           </ul>
       </div>
