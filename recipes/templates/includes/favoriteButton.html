@@ -1,8 +1,8 @@
-<button class="button button_style_none" name="favorites"
+<button class="button button_style_none" name="favorites">
   {% if not recipe.favorite_flag %}
-    data-out><span class="icon-favorite {% if big %}icon-favorite_big{% endif %}">
+    <span class="icon-favorite {% if big %} icon-favorite_big{% endif %}">
   {% else %}
-    ><span class="icon-favorite icon-favorite_active {% if big %}icon-favorite_big{% endif %}">
+    <span class="icon-favorite_active {% if big %} icon-favorite_big{% endif %}">
   {% endif %}
     </span>
 </button>
