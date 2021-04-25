@@ -14,6 +14,7 @@
       <p class="card__text"><span class="icon-time"></span> {{ recipe.cooking_time }} мин.</p>
       <p class="card__text"><span class="icon-user"></span> <a href="{% url 'profile_view' recipe.author.username %}" style="color: black"> {{ recipe.author|get_full_name_or_username }}</a></p>
     </div>
+      </ul>
   </div>
   <div class="card__footer">
     {% if user.is_authenticated %}

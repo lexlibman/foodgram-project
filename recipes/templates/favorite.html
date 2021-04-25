@@ -8,8 +8,7 @@
 {% endblock %}
 
 {% block content %}
-  <div class="main container">
-  {% include "includes/name.html" with name="Избранное" include_tags=True %}
+    {% include "includes/name.html" with name="Избранное" include_tags=True %}
     {% if not page %}
         <div class="recipe__title">
             <p class="recipe__title">Вы еще ничего не выбрали.</p>

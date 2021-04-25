@@ -8,10 +8,8 @@
 {% endblock %}
 
 {% block content %}
-  <div class="main container">
-      {% include "includes/name.html" with name="Рецепты" include_tags=True %}
-  </div>
 
+    {% include "includes/name.html" with name="Рецепты" include_tags=True %}
   <div class="card-list">
     {% for recipe in page %}
       {% include './includes/recipeCard.html' with recipe=recipe %}
