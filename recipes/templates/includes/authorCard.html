@@ -9,7 +9,7 @@
       {% for recipe in author.recipes.all %}
         {% if forloop.counter < 4 %}
           <li class="card-user__item">
-            {% include './recipeCardSmall.html' with recipe=recipe %}
+            {% include 'includes/recipeCardSmall.html' with recipe=recipe %}
           </li>
         {% endif %}
       {% endfor %}

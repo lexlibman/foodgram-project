@@ -33,6 +33,10 @@ The site is available on http://130.193.57.79
     ```
     cd foodgram-project/
     ```
+  
+- Environment variables what you need are in `env.example` file. Put they to `.env` file and set yours values.
+  
+
 - Start docker-compose
     ```
     docker-compose up -d

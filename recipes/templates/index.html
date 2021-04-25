@@ -9,8 +9,7 @@
 
 {% block content %}
   <div class="main__header">
-    <h1 class="main__title">Рецепты</h1>
-    {% include './includes/filterTags.html' %}
+    {% include './includes/filterTags.html' with use_case=index%}
   </div>
 
   <div class="card-list">
