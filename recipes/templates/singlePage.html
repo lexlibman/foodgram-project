@@ -42,7 +42,7 @@
 
     <ul class="single-card__items">
       <li class="single-card__item">
-        {% if user.is_authenticated and recipe|is_in_shop_list_of:user %}
+        {% if user.is_authenticated and recipe.shoplist_flag %}
           <button class="button button_style_blue" name="purchases">
             <span class="icon-check button__icon"></span> Рецепт добавлен
           </button>
