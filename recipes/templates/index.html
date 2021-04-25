@@ -12,13 +12,12 @@
     {% include "includes/name.html" with name="Рецепты" include_tags=True %}
   <div class="card-list">
     {% for recipe in page %}
-      {% include './includes/recipeCard.html' with recipe=recipe %}
+      {% include 'includes/recipeCard.html' with recipe=recipe %}
     {% endfor %}
   </div>
 
-  {% if page.has_other_pages %}
-    {% include './includes/paginator.html' with page=page paginator=paginator %}
-  {% endif %}
+    {% include 'includes/paginator.html' %}
+
 {% endblock %}
 
 {% block js %}

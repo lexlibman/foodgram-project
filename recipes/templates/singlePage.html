@@ -20,12 +20,14 @@
     <div class="single-card__header-info">
       <h1 class="single-card__title">{{ recipe.title }}</h1>   
       <div class="single-card__favorite">
-        {% include './includes/favoriteButton.html' with recipe=recipe big=True %}
+        {% if user.is_authenticated %}
+            {% include 'includes/favoriteButton.html' with recipe=recipe big=True %}
+        {% endif %}
       </div>
     </div>
-
-    {% include './includes/tags.html' with recipe=recipe %}
-
+    <ul class="card__items">
+        {% include 'includes/tags.html' with recipe=recipe %}
+    </ul>
     <div class="single-card__items single-card__items_column">
       {% include './includes/cookingTime.html' %}
       <ul class="single-card__items">
@@ -35,16 +37,16 @@
         {% endif %}
       </ul>
     </div>
-
-    <ul class="single-card__items">
-      <li class="single-card__item">
-        {% include 'includes/shoplistButton.html' with recipe=recipe %}
-      </li>
-      {% if recipe.author != user %}
-        {% include 'includes/followButton.html' with page=page%}
-      {% endif %}
-    </ul>
-
+    {% if user.is_authenticated %}
+        <ul class="single-card__items">
+          <li class="single-card__item">
+            {% include 'includes/shoplistButton.html' with recipe=recipe %}
+          </li>
+          {% if recipe.author != user %}
+            {% include 'includes/followButton.html' with page=page%}
+          {% endif %}
+        </ul>
+    {% endif %}
     <div class="single-card__section">
       <h3 class="single-card__section-title">Ингредиенты:</h3>
       <div class="single-card__items single-card__items_column">

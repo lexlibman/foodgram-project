@@ -7,12 +7,10 @@
 {% block css %}
   <link rel="stylesheet" href="{% static 'pages/shopList.css' %}">
 {% endblock %}
-
 {% block content %}
-  <div class="main__header">
-    <h1 class="main__title">Список покупок</h1>
-  </div>
-  <div class="card-list card-list_column">
+{% if recipes %}
+    {% include "includes/name.html" with name='Список покупок' %}
+    <div class="card-list card-list_column">
     <ul class="shopping-list">
       {% for recipe in recipes %}
         <li class="shopping-list__item" data-id="{{ recipe.recipe.id }}">
@@ -21,18 +19,18 @@
         </li>
       {% endfor %}
     </ul>
-    {% if recipes %}
         <a href="{% url 'purchases_download' %}"><button class="button button_style_blue">Скачать список</button></a>
-    {% else %}
-          <div class="custom-center-block">
-            <p class="custom-text-block">Список покупок пуст</p>
-            <div class="custom-button-block">
-              <a class="button button_style_blue" href="{% url 'index' %}">Перейти на главную</a>
-            </div>
-          </div>
+    </div>
+{% else %}
+    <div class="custom-center-block">
+        <p class="custom-text-block">Список покупок пуст</p>
+        <div class="custom-button-block">
+            <a class="button button_style_blue" href="{% url 'index' %}">Перейти на главную</a>
+        </div>
+    </div>
     {% endif %}
-  </div>
 {% endblock %}
+
 {% block js %}
   <script src="{% static 'js/components/Purchases.js' %}"></script>
   <script src="{% static 'js/config/config.js' %}"></script>
