@@ -9,8 +9,12 @@
 
 {% block content %}
   <div class="main__header">
-    {% include './includes/filterTags.html' with use_case=favorite %}
-  </div>
+  {% include "includes/name.html" with name="Избранное" include_tags=True %}
+    {% if not page %}
+        <div class="recipe__title">
+            <p class="recipe__title">Вы еще ничего не выбрали.</p>
+        </div>
+    {% endif %}
 
   <div class="card-list">
     {% for recipe in page %}

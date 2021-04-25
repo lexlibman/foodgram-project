@@ -1,9 +1,3 @@
-{% if use_case == 'favorite' %}
-    <h1 class="main__title">Избранное</h1>
-{% elif use_case == 'index' %}
-    <h1 class="main__title">Рецепты</h1>
-{% endif %}
-
 <ul class="tags">
   {% for tag in request.tags %}
     <li class="tags__item">

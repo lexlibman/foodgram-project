@@ -7,7 +7,3 @@ def page_not_found(request, exception):
 
 def server_error(request):
     return render(request, 'error/500.html', status=500)
-
-
-def page_bad_request(request, exception):
-    return render(request, 'error/400.html', status=400)
