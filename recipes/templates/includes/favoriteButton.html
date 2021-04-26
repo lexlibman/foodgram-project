@@ -1,15 +1,4 @@
-<button class="button button_style_none" name="favorites">
-  {% if not recipe.favorite_flag %}
-    <span class="icon-favorite {% if big %} icon-favorite_big{% endif %}">
-  {% else %}
-    <span class="icon-favorite_active {% if big %} icon-favorite_big{% endif %}">
-  {% endif %}
-    </span>
-</button>
-{% if big %}
-    {% if not recipe.favorite_flag %}
-        <div class="single-card__favorite-tooltip tooltip">Добавить в избранное</div>
-    {% else %}
-        <div class="single-card__favorite-tooltip tooltip">Удалить из избранного</div>
-    {% endif %}
+<button class="button button_style_none" name="favorites"{{ recipe.favorite_flag|yesno:", data-out" }}><span class="icon-favorite {{ star_size }} {{ recipe.favorite_flag|yesno:' icon-favorite_active,' }}"></span></button>
+{% if help_text %}
+    <div class="single-card__favorite-tooltip tooltip">{{ recipe.favorite_flag|yesno:"Добавлено в избранное,Добавить в избранное" }}</div>
 {% endif %}
