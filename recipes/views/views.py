@@ -31,10 +31,10 @@ def index(request):
         settings.PAGINATION_PAGE_SIZE,
         request
     )
-    if (page_number
-            and int(page_number) not in range(1, paginator.num_pages + 1)):
-        return redirect(f"{reverse('index')}{request.current_filter}")
-    page = paginator.get_page(page_number)
+    if page_number and int(page_number) > paginator.num_pages + 1:
+        page = paginator.get_page(paginator.num_pages + 1)
+    else:
+        page = paginator.get_page(page_number)
 
     return render(
         request,
@@ -128,11 +128,10 @@ def profile_view(request, username):
         settings.PAGINATION_PAGE_SIZE,
         request
     )
-    if (page_number
-            and int(page_number) not in range(1, paginator.num_pages + 1)):
-        return redirect(f"{reverse('profile', args=[author.username])}"
-                        f"{request.current_filter}")
-    page = paginator.get_page(page_number)
+    if page_number and int(page_number) > paginator.num_pages + 1:
+        page = paginator.get_page(paginator.num_pages + 1)
+    else:
+        page = paginator.get_page(page_number)
 
     return render(
         request,
@@ -154,10 +153,10 @@ def subscriptions(request):
         settings.PAGINATION_PAGE_SIZE,
         request
     )
-    if (page_number
-            and int(page_number) not in range(1, paginator.num_pages + 1)):
-        return redirect(reverse('subscriptions'))
-    page = paginator.get_page(page_number)
+    if page_number and int(page_number) > paginator.num_pages + 1:
+        page = paginator.get_page(paginator.num_pages + 1)
+    else:
+        page = paginator.get_page(page_number)
 
     return render(
         request,
@@ -185,14 +184,10 @@ def favorites(request):
         settings.PAGINATION_PAGE_SIZE,
         request,
     )
-    if page_number and int(page_number) not in range(
-            1,
-            paginator.num_pages + 1
-    ):
-        return redirect(
-            f"{reverse('favorites_index')}{request.current_filter}"
-        )
-    page = paginator.get_page(page_number)
+    if page_number and int(page_number) > paginator.num_pages + 1:
+        page = paginator.get_page(paginator.num_pages + 1)
+    else:
+        page = paginator.get_page(page_number)
 
     return render(
         request,
