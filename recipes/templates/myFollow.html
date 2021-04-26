@@ -13,13 +13,11 @@
   </div>
   <div class="card-list">
     {% for author in page %}
-      {% include './includes/authorCard.html' with author=author %}
+      {% include 'includes/authorCard.html' with author=author %}
     {% endfor %}
   </div>
     {% if not page %}
-    <div class="custom-button-block">
-        <a class="button button_style_blue" href="{% url 'index' %}">Выбрать рецепт!</a>
-    </div>
+        {% include 'includes/redirectButton.html' with text='Найти авторов' %}
     {% endif %}
   {% include 'includes/paginator.html' %}
 {% endblock %}

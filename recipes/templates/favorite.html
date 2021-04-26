@@ -17,9 +17,7 @@
   </div>
 
     {% if not page %}
-        <div class="custom-button-block">
-            <a class="button button_style_blue" href="{% url 'index' %}">Выбрать рецепт!</a>
-        </div>
+        {% include './includes/redirectButton.html' with text='Выбрать рецепт' %}
     {% endif %}
 
   {% include 'includes/paginator.html' %}

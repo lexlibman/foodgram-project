@@ -19,14 +19,12 @@
         </li>
       {% endfor %}
     </ul>
+    </div>
     {% if recipes %}
         <a href="{% url 'purchases_download' %}"><button class="button button_style_blue">Скачать список</button></a>
     {% else %}
-        <div class="custom-button-block">
-            <a class="button button_style_blue" href="{% url 'index' %}">Выбрать рецепт!</a>
-        </div>
+        {% include './includes/redirectButton.html' with text='Заполнить список' %}
     {% endif %}
-    </div>
 {% endblock %}
 
 {% block js %}
