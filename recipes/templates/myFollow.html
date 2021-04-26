@@ -16,6 +16,11 @@
       {% include './includes/authorCard.html' with author=author %}
     {% endfor %}
   </div>
+    {% if not page %}
+    <div class="custom-button-block">
+        <a class="button button_style_blue" href="{% url 'index' %}">Выбрать рецепт!</a>
+    </div>
+    {% endif %}
   {% include 'includes/paginator.html' %}
 {% endblock %}
 

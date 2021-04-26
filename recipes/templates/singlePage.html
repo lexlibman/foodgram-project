@@ -25,11 +25,9 @@
         {% endif %}
       </div>
     </div>
-    <ul class="card__items">
-        {% include 'includes/tags.html' with recipe=recipe %}
-    </ul>
     <div class="single-card__items single-card__items_column">
-      {% include './includes/cookingTime.html' %}
+        {% include 'includes/tags.html' with recipe=recipe %}
+        {% include 'includes/cookingTime.html' %}
       <ul class="single-card__items">
         <li class="single-card__item"><p class="single-card__text"><span class="icon-user"></span> {{ recipe.author|get_full_name_or_username }}</p></li>
         {% if user.is_superuser or recipe.author == user %}

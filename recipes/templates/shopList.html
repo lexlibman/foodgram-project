@@ -7,26 +7,27 @@
 {% block css %}
   <link rel="stylesheet" href="{% static 'pages/shopList.css' %}">
 {% endblock %}
-
-{% include "includes/name.html" with name='Список покупок' %}
-<div class="card-list card-list_column">
-{% if recipes %}
 {% block content %}
-<ul class="shopping-list">
-  {% for recipe in recipes %}
-    <li class="shopping-list__item" data-id="{{ recipe.recipe.id }}">
-      {% include './includes/recipeCardSmall.html' with recipe=recipe.recipe shop_list=True %}
-      <a href="#" class="shopping-list__button link">Удалить</a>
-    </li>
-  {% endfor %}
-</ul>
-    <a href="{% url 'purchases_download' %}"><button class="button button_style_blue">Скачать список</button></a>
-</div>
-{% endblock %}
-{% else %}
-    {% include 'includes/emptyShopList.html' %}
-{% endif %}
+    {% include "includes/name.html" with name='Список покупок' %}
+    <div class="card-list card-list_column">
+    <ul class="shopping-list">
 
+      {% for recipe in recipes %}
+        <li class="shopping-list__item" data-id="{{ recipe.recipe.id }}">
+          {% include './includes/recipeCardSmall.html' with recipe=recipe.recipe shop_list=True %}
+          <a href="#" class="shopping-list__button link">Удалить</a>
+        </li>
+      {% endfor %}
+    </ul>
+    {% if recipes %}
+        <a href="{% url 'purchases_download' %}"><button class="button button_style_blue">Скачать список</button></a>
+    {% else %}
+        <div class="custom-button-block">
+            <a class="button button_style_blue" href="{% url 'index' %}">Выбрать рецепт!</a>
+        </div>
+    {% endif %}
+    </div>
+{% endblock %}
 
 {% block js %}
   <script src="{% static 'js/components/Purchases.js' %}"></script>
