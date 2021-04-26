@@ -8,10 +8,10 @@
   <link rel="stylesheet" href="{% static 'pages/shopList.css' %}">
 {% endblock %}
 {% block content %}
-{% if recipes %}
     {% include "includes/name.html" with name='Список покупок' %}
     <div class="card-list card-list_column">
     <ul class="shopping-list">
+    {% if recipes %}
       {% for recipe in recipes %}
         <li class="shopping-list__item" data-id="{{ recipe.recipe.id }}">
           {% include './includes/recipeCardSmall.html' with recipe=recipe.recipe shop_list=True %}
@@ -21,7 +21,7 @@
     </ul>
         <a href="{% url 'purchases_download' %}"><button class="button button_style_blue">Скачать список</button></a>
     </div>
-{% else %}
+    {% else %}
     <div class="custom-center-block">
         <p class="custom-text-block">Список покупок пуст</p>
         <div class="custom-button-block">

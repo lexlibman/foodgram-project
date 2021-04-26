@@ -9,7 +9,7 @@
 {% endblock %}
 
 {% block content %}
-{% include "includes/name.html" with name="Создание рецепта" include_tags=True %}
+{% include "includes/name.html" with name="Создание рецепта" %}
 <div class="form-container">
   <form class="form" method="post" enctype="multipart/form-data">
     {% csrf_token %}
