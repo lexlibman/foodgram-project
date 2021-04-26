@@ -16,10 +16,6 @@
     {% endfor %}
   </div>
 
-    {% if not page %}
-        {% include './includes/redirectButton.html' with text='Выбрать рецепт' %}
-    {% endif %}
-
   {% include 'includes/paginator.html' %}
 
 {% endblock %}

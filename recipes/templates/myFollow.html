@@ -16,9 +16,6 @@
       {% include 'includes/authorCard.html' with author=author %}
     {% endfor %}
   </div>
-    {% if not page %}
-        {% include 'includes/redirectButton.html' with text='Найти авторов' %}
-    {% endif %}
   {% include 'includes/paginator.html' %}
 {% endblock %}
 
