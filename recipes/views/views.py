@@ -7,8 +7,8 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 
 from recipes.forms import RecipeForm
-from recipes.models import Recipe, RecipeIngredient
-from recipes.utils import (create_paginator, get_ingredients, save_recipe,
+from recipes.models import Recipe
+from recipes.utils import (create_paginator, edit_recipe, save_recipe,
                            turn_on_tags)
 
 User = get_user_model()
@@ -62,15 +62,11 @@ def recipe_view_slug(request, recipe_id, slug):
 def recipe_new(request):
     form = RecipeForm(request.POST or None, files=request.FILES or None)
     if form.is_valid():
-        form.instance.author = request.user
-        new_recipe = form.save()
-        save_recipe(ingredients=get_ingredients(request),
-                    recipe=new_recipe)
-        return redirect('recipe_view_slug',
-                        username=request.user.username,
-                        recipe_id=new_recipe.id)
+        recipe = save_recipe(request, form)
 
-    form = RecipeForm()
+        return redirect(
+            'recipe_view_slug', recipe_id=recipe.id, slug=recipe.slug
+        )
 
     return render(request, 'formRecipe.html', {'form': form})
 
@@ -91,14 +87,10 @@ def recipe_edit(request, recipe_id, slug):
         instance=recipe
     )
     if form.is_valid():
-        recipe = form.save(commit=False)
-        RecipeIngredient.objects.filter(recipe=recipe.id).delete()
-        recipe.tags.remove()
-        save_recipe(ingredients=get_ingredients(request),
-                    recipe=recipe)
-        return redirect('recipe_view_slug',
-                        username=request.user.username,
-                        recipe_id=recipe.id)
+        edit_recipe(request, form, instance=recipe)
+        return redirect(
+            'recipe_view_slug', recipe_id=recipe.id, slug=recipe.slug
+        )
 
     return render(
         request,
