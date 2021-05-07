@@ -66,7 +66,6 @@ def recipe_new(request):
         new_recipe = form.save()
         save_recipe(ingredients=get_ingredients(request),
                     recipe=new_recipe)
-        form.save_m2m()
         return redirect('recipe_view_slug',
                         username=request.user.username,
                         recipe_id=new_recipe.id)
@@ -97,8 +96,6 @@ def recipe_edit(request, recipe_id, slug):
         recipe.tags.remove()
         save_recipe(ingredients=get_ingredients(request),
                     recipe=recipe)
-
-        form.save_m2m()
         return redirect('recipe_view_slug',
                         username=request.user.username,
                         recipe_id=recipe.id)
