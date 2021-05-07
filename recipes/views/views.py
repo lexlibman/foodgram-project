@@ -26,9 +26,14 @@ def index(request):
         'author'
     )
 
-    paginator, page_number = create_paginator(recipes, settings.PAGINATOR_ITEMS, request)
-    if page_number and int(page_number) not in range(1, paginator.num_pages + 1):
-        return redirect(f"{reverse('index')}{request.current_filter}")
+    paginator, page_number = create_paginator(
+        recipes,
+        settings.PAGINATOR_ITEMS,
+        request)
+    if page_number and int(page_number) > paginator.num_pages + 1:
+        return redirect(
+            f"{reverse('index')}{request.current_filter}"
+        )
     page = paginator.get_page(page_number)
     return render(
         request,
@@ -122,9 +127,10 @@ def profile_view(request, username):
         settings.PAGINATION_PAGE_SIZE,
         request
     )
-    if page_number and int(page_number) not in range(1, paginator.num_pages+1):
+    if page_number and int(page_number) > paginator.num_pages + 1:
         return redirect(
-            f"{reverse('profile_view', args=[author.username])}{request.current_filter}"
+            f"{reverse('profile_view', args=[author.username])}"
+            f'{request.current_filter}'
         )
     page = paginator.get_page(page_number)
 
@@ -148,7 +154,7 @@ def subscriptions(request):
         settings.PAGINATION_PAGE_SIZE,
         request
     )
-    if page_number and int(page_number) not in range(1, paginator.num_pages+1):
+    if page_number and int(page_number) > paginator.num_pages + 1:
         return redirect(reverse('subscriptions'))
     page = paginator.get_page(page_number)
 
@@ -178,7 +184,7 @@ def favorites(request):
         settings.PAGINATION_PAGE_SIZE,
         request,
     )
-    if page_number and int(page_number) not in range(1, paginator.num_pages + 1):
+    if page_number and int(page_number) > paginator.num_pages + 1:
         return redirect(f"{reverse('favorites')}{request.current_filter}")
     page = paginator.get_page(page_number)
 
