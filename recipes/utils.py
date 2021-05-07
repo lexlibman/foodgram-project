@@ -1,9 +1,9 @@
-from django.core.paginator import Paginator
 from decimal import Decimal
 
+from django import forms
+from django.core.paginator import Paginator
 from django.db import IntegrityError, transaction
 from django.http import HttpResponseBadRequest
-from django import forms
 
 from .models import Ingredient, RecipeIngredient, Tag
 

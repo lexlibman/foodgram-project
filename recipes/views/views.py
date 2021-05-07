@@ -8,8 +8,8 @@ from django.urls import reverse
 
 from recipes.forms import RecipeForm
 from recipes.models import Recipe
-from recipes.utils import (edit_recipe, save_recipe,
-                           create_paginator, turn_on_tags)
+from recipes.utils import (create_paginator, edit_recipe, save_recipe,
+                           turn_on_tags)
 
 User = get_user_model()
 
