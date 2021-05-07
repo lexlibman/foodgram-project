@@ -1,5 +1,5 @@
-from rest_framework.generics import get_object_or_404
 from django.core.paginator import Paginator
+from rest_framework.generics import get_object_or_404
 
 from .models import Ingredient, RecipeIngredient, Tag
 
