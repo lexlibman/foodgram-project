@@ -28,7 +28,7 @@ def index(request):
 
     paginator, page_number = create_paginator(
         recipes,
-        settings.PAGINATOR_ITEMS,
+        settings.PAGINATION_PAGE_SIZE,
         request)
     if page_number and int(page_number) > paginator.num_pages + 1:
         return redirect(
