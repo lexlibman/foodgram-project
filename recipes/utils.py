@@ -37,7 +37,6 @@ def save_recipe(request, form):
                     )
                 )
             RecipeIngredient.objects.bulk_create(objs)
-            form.save_m2m()
             return recipe
     except IntegrityError:
         raise HttpResponseBadRequest
