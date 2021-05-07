@@ -2,6 +2,7 @@ from rest_framework.generics import get_object_or_404
 from rest_framework import filters, mixins, status, viewsets
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
+from rest_framework.exceptions import PermissionDenied
 
 from recipes.models import Favorite, Ingredient, Subscription
 from recipes.permissions import IsOwnerOrAdmin
@@ -27,10 +28,22 @@ class CreateDestroyViewSet(mixins.CreateModelMixin,
 
         return obj
 
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        if request.user.is_authenticated:
+            self.perform_create(serializer)
+        else:
+            raise PermissionDenied('Необходимо авторизоваться')
+
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
     def destroy(self, request, *args, **kwargs):
         instance = self.get_object(user=self.request.user)
         success = instance.delete()
-        return Response({'success': bool(success)}, status=status.HTTP_200_OK)
+        return Response({'success': bool(success)}, status=status.HTTP_204_NO_CONTENT)
 
 
 class IngredientViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):

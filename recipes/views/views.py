@@ -113,7 +113,7 @@ def profile_view(request, username):
     tags = request.existing_tags
     if not tags:
         return redirect(f"{reverse('profile_view', args=[author.username])}"
-                        f"{turn_on_tags()}")
+                        f'{turn_on_tags()}')
     author_recipes = Recipe.objects.filter(
         author=author
     ).get_additional_attributes(

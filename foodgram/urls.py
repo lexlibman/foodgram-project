@@ -14,7 +14,7 @@ flatpages_urls = [
 
 urlpatterns = [
     path('auth/', include('users.urls')),
-    path('admin/', admin.site.urls),
+    path('admin/web/', admin.site.urls),
     path('about/', include(flatpages_urls)),
     path('', include('recipes.urls')),
 ]

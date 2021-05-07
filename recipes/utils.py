@@ -65,6 +65,6 @@ def create_paginator(items_list, number_of_items, request):
 
 def turn_on_tags():
     return (
-        f"?filter="
+        '?filter='
         f"{'&filter='.join(Tag.objects.values_list('title', flat=True))}"
     )

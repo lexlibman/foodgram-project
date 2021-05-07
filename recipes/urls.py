@@ -51,5 +51,5 @@ urlpatterns = [
         name='purchases_download'
     ),
     path('recipe/', include(recipes_urls)),
-    path('<str:username>/', views.profile_view, name='profile_view'),
+    path('author/<str:username>/', views.profile_view, name='profile_view'),
 ]
