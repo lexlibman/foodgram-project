@@ -22,7 +22,7 @@ def index(request):
     recipes = Recipe.objects.get_additional_attributes(
         request.user,
         tags
-    ).distinct().select_related(
+    ).select_related(
         'author'
     )
 
@@ -119,7 +119,7 @@ def profile_view(request, username):
     ).get_additional_attributes(
         request.user,
         tags
-    ).distinct().select_related(
+    ).select_related(
         'author'
     )
 
