@@ -11,7 +11,7 @@
 {% block content %}
   <div class="main__header">
     <h1 class="main__title">{{ author|get_full_name_or_username }}</h1>
-    {% include './includes/filterTags.html' %}
+    {% include 'includes/filterTags.html' %}
   </div>
 
   {% if user.is_authenticated and author != user %}
