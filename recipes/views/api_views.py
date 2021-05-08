@@ -1,5 +1,4 @@
 from rest_framework import filters, mixins, status, viewsets
-from rest_framework.exceptions import PermissionDenied
 from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -27,22 +26,6 @@ class CreateDestroyViewSet(mixins.CreateModelMixin,
         self.check_object_permissions(self.request, obj)
 
         return obj
-
-    def create(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-
-        if request.user.is_authenticated:
-            self.perform_create(serializer)
-        else:
-            raise PermissionDenied('Необходимо авторизоваться')
-
-        headers = self.get_success_headers(serializer.data)
-        return Response(
-            serializer.data,
-            status=status.HTTP_201_CREATED,
-            headers=headers,
-        )
 
     def destroy(self, request, *args, **kwargs):
         instance = self.get_object(user=self.request.user)
