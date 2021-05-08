@@ -6,12 +6,10 @@
   </div>
   <div class="card-user__body">
     <ul class="card-user__items">
-      {% for recipe in author.recipes.all %}
-        {% if forloop.counter < 4 %}
+      {% for recipe in author.recipes.all|slice:":3" %}
           <li class="card-user__item">
             {% include 'includes/recipeCardSmall.html' with recipe=recipe %}
           </li>
-        {% endif %}
       {% endfor %}
       {% if author.recipe_count > 3 %}
         <li class="card-user__item">

@@ -37,7 +37,7 @@ def index(request):
     page = paginator.get_page(page_number)
     return render(
         request,
-        'index.html',
+        'recipes/index.html',
         {'page': page},
     )
 
@@ -55,7 +55,7 @@ def recipe_view_slug(request, recipe_id, slug):
         slug=slug
     )
 
-    return render(request, 'singlePage.html', {'recipe': recipe})
+    return render(request, 'recipes/singlePage.html', {'recipe': recipe})
 
 
 @login_required
@@ -68,7 +68,7 @@ def recipe_new(request):
             'recipe_view_slug', recipe_id=recipe.id, slug=recipe.slug
         )
 
-    return render(request, 'formRecipe.html', {'form': form})
+    return render(request, 'recipes/formRecipe.html', {'form': form})
 
 
 @login_required
@@ -94,7 +94,7 @@ def recipe_edit(request, recipe_id, slug):
 
     return render(
         request,
-        'formRecipe.html',
+        'recipes/formRecipe.html',
         {'form': form, 'recipe': recipe}
     )
 
@@ -136,7 +136,7 @@ def profile_view(request, username):
 
     return render(
         request,
-        'authorRecipe.html',
+        'recipes/authorRecipe.html',
         {'author': author, 'page': page}
     )
 
@@ -160,7 +160,7 @@ def subscriptions(request):
 
     return render(
         request,
-        'myFollow.html',
+        'recipes/myFollow.html',
         {'page': page},
     )
 
@@ -190,7 +190,7 @@ def favorites(request):
 
     return render(
         request,
-        'favorite.html',
+        'recipes/favorite.html',
         {'page': page},
     )
 
@@ -200,7 +200,7 @@ def purchases(request):
     recipes = request.user.purchases.all()
     return render(
         request,
-        'shopList.html',
+        'recipes/shopList.html',
         {'recipes': recipes},
     )
 
