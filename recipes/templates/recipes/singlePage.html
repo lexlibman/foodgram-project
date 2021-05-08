@@ -29,12 +29,12 @@
                 {% include 'includes/tags.html' %}
             </ul>
             <div class="single-card__items single-card__items_column">
-                <p class="single-card__text"><span class="icon-time"></span> {{ recipe.cooking_time }} мин.</p>
+                <p class="single-card__text"><span class="icon-time">&nbsp;</span> {{ recipe.cooking_time }} мин.</p>
                 <ul class="single-card__items">
                     <a href="{% url "profile_view" recipe.author.username %}">
                         <li class="single-card__item">
                             <p class="single-card__text">
-                                <span class="icon-user"></span>
+                                <span class="icon-user">&nbsp;</span>
                                 {{ recipe.author }}
                             </p>
                         </li>
@@ -59,9 +59,9 @@
                         {% include 'includes/shoplistButton.html' with flag=recipe.shoplist_flag big=True %}
                     </div>
                 </li>
-          {% if recipe.author != user %}
-            {% include 'includes/followButton.html' with flag=page.0.follow_flag%}
-          {% endif %}
+                {% if recipe.author != user %}
+                    {% include 'includes/followButton.html' %}
+                {% endif %}
         </ul>
     {% endif %}
     <div class="single-card__section">
