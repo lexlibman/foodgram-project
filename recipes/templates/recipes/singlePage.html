@@ -21,7 +21,7 @@
                     <h1 class="single-card__title">{{ recipe.title }}</h1>
                     <div class="single-card__favorite">
                         {% if user.is_authenticated %}
-                            {% include 'includes/favoriteButton.html' with flag=recipe.favorite_flag help_text=True star_size="icon-favorite_big" %}
+                            {% include 'includes/favoriteButton.html' with help_text=True star_size="icon-favorite_big" %}
                         {% endif %}
                     </div>
             </div>

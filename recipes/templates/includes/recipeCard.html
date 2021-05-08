@@ -19,7 +19,7 @@
   <div class="card__footer">
     {% if user.is_authenticated %}
       {% include 'includes/shoplistButton.html' with flag=recipe.shoplist_flag %}
-      {% include 'includes/favoriteButton.html' with flag=recipe.favorite_flag %}
+      {% include 'includes/favoriteButton.html' %}
     {% endif %}
   </div>
 </div>
