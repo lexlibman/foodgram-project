@@ -8,9 +8,7 @@
 {% endblock %}
 
 {% block content %}
-  <div class="main__header">
-    <h1 class="main__title">Мои подписки</h1>
-  </div>
+  {% include "includes/name.html" with name="Мои подписки" %}
   <div class="card-list">
     {% for author in page %}
       {% include 'includes/authorCard.html' with author=author %}
