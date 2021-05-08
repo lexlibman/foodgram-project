@@ -61,9 +61,7 @@
                 </li>
                 {% if author != user %}
                     <div class="author-subscribe" data-author="{{ author.id }}">
-                      <p style="padding: 0 0 2em 0;">
                         {% include 'includes/followButton.html' %}
-                      </p>
                     </div>
                 {% endif %}
             {% endif %}
