@@ -31,10 +31,23 @@
             <div class="single-card__items single-card__items_column">
                 <p class="single-card__text"><span class="icon-time"></span> {{ recipe.cooking_time }} мин.</p>
                 <ul class="single-card__items">
-                    <p class="card__text"><span class="icon-user"></span> <a href="{% url 'profile_view' recipe.author.username %}" style="color: black"> {{ recipe.author|get_full_name_or_username }}</a></p>
-                {% if user.is_superuser or recipe.author == user %}
-                    <li class="single-card__item">  <a style="margin-left: 2.5em" href="{% url 'recipe_edit' recipe.id recipe.slug %}" class="single-card__text">Редактировать рецепт</a></li>
-                {% endif %}
+                    <a href="{% url "profile_view" recipe.author.username %}">
+                        <li class="single-card__item">
+                            <p class="single-card__text">
+                                <span class="icon-user"></span>
+                                {{ recipe.author }}
+                            </p>
+                        </li>
+                    </a>
+                    {% if user.is_authenticated %}
+                        {% if user.is_superuser or recipe.author == user %}
+                            <li class="single-card__item">
+                                <a style="margin-left: 2.5em" href="{% url "recipe_edit" recipe.id recipe.slug %}" class="single-card__text">
+                                    Редактировать рецепт
+                                </a>
+                            </li>
+                        {% endif %}
+                    {% endif %}
                 </ul>
             </div>
 
@@ -42,7 +55,7 @@
 
             {% if user.is_authenticated %}
                 <li class="single-card__item">
-                    {% include 'includes/shoplistButton.html' with flag=recipe.shoplist_flag style="button button_style_blue"%}
+                    {% include 'includes/shoplistButton.html' with flag=recipe.shoplist_flag %}
                 </li>
           {% if recipe.author != user %}
             {% include 'includes/followButton.html' with page=page %}
