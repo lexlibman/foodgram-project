@@ -18,7 +18,7 @@
   </div>
   <div class="card__footer">
     {% if user.is_authenticated %}
-      {% include 'includes/shoplistButton.html' with recipe=recipe style="button button_style_light-blue" %}
+      {% include 'includes/shoplistButton.html' %}
       {% include 'includes/favoriteButton.html' with recipe=recipe big=False %}
     {% endif %}
   </div>

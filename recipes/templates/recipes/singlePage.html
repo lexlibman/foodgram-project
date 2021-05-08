@@ -55,7 +55,7 @@
 
             {% if user.is_authenticated %}
                 <li class="single-card__item">
-                    {% include 'includes/shoplistButton.html' with flag=recipe.shoplist_flag %}
+                    {% include 'includes/shoplistButton.html' with flag=recipe.shoplist_flag big=True %}
                 </li>
           {% if recipe.author != user %}
             {% include 'includes/followButton.html' with page=page %}
