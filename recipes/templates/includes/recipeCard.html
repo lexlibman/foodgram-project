@@ -9,7 +9,7 @@
   <div class="card__body">
     <a class="card__title link" href="{% url 'recipe_view_slug' recipe.id recipe.slug %}">{{ recipe.title }}</a>
       <ul class="card__items">
-        {% include 'includes/tags.html' with recipe=recipe %}
+        {% include 'includes/tags.html' %}
       </ul>
     <div class="card__items card__items_column">
       <p class="card__text"><span class="icon-time"></span> {{ recipe.cooking_time }} мин.</p>
@@ -18,8 +18,8 @@
   </div>
   <div class="card__footer">
     {% if user.is_authenticated %}
-      {% include 'includes/shoplistButton.html' %}
-      {% include 'includes/favoriteButton.html' with recipe=recipe big=False %}
+      {% include 'includes/shoplistButton.html' with flag=recipe.shoplist_flag %}
+      {% include 'includes/favoriteButton.html' with flag=recipe.favorite_flag big=False %}
     {% endif %}
   </div>
 </div>
