@@ -9,33 +9,28 @@ User = get_user_model()
 class RecipeQuerySet(models.QuerySet):
 
     def get_additional_attributes(self, user, tags=None):
-        if user.is_authenticated:
-            favorite = Favorite.objects.filter(
-                recipe=models.OuterRef('pk'),
-                user=user
-            )
-            purchase = Purchase.objects.filter(
-                recipe=models.OuterRef('pk'),
-                user=user
-            )
-            subscription = Subscription.objects.filter(
-                author=models.OuterRef('author'),
-                user=user
-            )
-            if tags:
-                return self.filter(
-                    tags__in=tags
-                ).annotate(
-                    favorite_flag=models.Exists(favorite),
-                    shoplist_flag=models.Exists(purchase),
-                    follow_flag=models.Exists(subscription)
-                )
-            return self.annotate(
-                favorite_flag=models.Exists(favorite),
-                shoplist_flag=models.Exists(purchase),
-                follow_flag=models.Exists(subscription)
-            )
-        return self
+        if not user.is_authenticated:
+            return self.filter(tags__in=tags).distinct()
+        favorite = Favorite.objects.filter(
+            recipe=models.OuterRef('pk'),
+            user=user
+        )
+        purchase = Purchase.objects.filter(
+            recipe=models.OuterRef('pk'),
+            user=user
+        )
+        subscription = Subscription.objects.filter(
+            author=models.OuterRef('author'),
+            user=user
+        )
+
+        return self.filter(
+                tags__in=tags
+            ).distinct().annotate(
+            favorite_flag=models.Exists(favorite),
+            shoplist_flag=models.Exists(purchase),
+            follow_flag=models.Exists(subscription),
+        )
 
 
 class Ingredient(models.Model):
