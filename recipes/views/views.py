@@ -29,7 +29,8 @@ def index(request):
     paginator, page_number = create_paginator(
         recipes,
         settings.PAGINATION_PAGE_SIZE,
-        request)
+        request
+    )
     if page_number and int(page_number) > paginator.num_pages + 1:
         return redirect(
             f"{reverse('index')}{request.current_filter}"
@@ -118,7 +119,7 @@ def profile_view(request, username):
     ).get_additional_attributes(
         request.user,
         tags
-    ).select_related(
+    ).distinct().select_related(
         'author'
     )
 
