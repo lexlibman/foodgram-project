@@ -32,7 +32,7 @@ class CreateDestroyViewSet(mixins.CreateModelMixin,
         success = instance.delete()
         return Response(
             {'success': bool(success)},
-            status=status.HTTP_204_NO_CONTENT,
+            status=status.HTTP_200_OK,
         )
 
 
