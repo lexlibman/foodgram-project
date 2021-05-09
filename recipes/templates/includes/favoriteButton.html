@@ -1,4 +1,4 @@
-<button class="button button_style_none" name="favorites"{{ flag|yesno:", data-out" }}><span class="icon-favorite {{ star_size }} {{ recipe.favorite_flag|yesno:' icon-favorite_active,' }}"></span></button>
+<button class="button button_style_none" name="favorites"{{ flag|yesno:", data-out" }}><span class="icon-favorite {{ star_size }} {{ flag|yesno:' icon-favorite_active,' }}"></span></button>
 {% if help_text %}
     <div class="single-card__favorite-tooltip tooltip">{{ flag|yesno:"Добавлено в избранное,Добавить в избранное" }}</div>
 {% endif %}
