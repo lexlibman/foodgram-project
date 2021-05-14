@@ -1,6 +1,6 @@
 from django import forms
 
-from .models import Recipe
+from .models import Ingredient, Recipe, RecipeIngredient
 
 
 class RecipeForm(forms.ModelForm):
@@ -16,3 +16,30 @@ class RecipeForm(forms.ModelForm):
         widgets = {
             'tags': forms.CheckboxSelectMultiple(),
         }
+
+    def clean(self):
+        known_ids = []
+        for items in self.data.keys():
+            if 'nameIngredient' in items:
+                name, num = items.split('_')
+                known_ids.append(num)
+        for num in known_ids:
+            title = self.data.get(f'nameIngredient_{num}'),
+            dimension = self.data.get(f'unitsIngredient_{num}')
+            try:
+                self._objs.append(
+                    Ingredient.objects.filter(
+                        title=title[0],
+                        dimension=dimension,
+                    )
+                )
+            except Ingredient.DoesNotExist:
+                raise forms.ValidationError(
+                    'Ингредиента нет в базе данных'
+                )
+
+    def save(self, commit=True):
+        instance = RecipeIngredient.objects.bulk_create(self._objs)
+        if commit:
+            instance.save()
+        return instance

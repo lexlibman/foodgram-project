@@ -8,8 +8,7 @@ from django.urls import reverse
 
 from recipes.forms import RecipeForm
 from recipes.models import Recipe
-from recipes.utils import (create_paginator, edit_recipe, save_recipe,
-                           turn_on_tags)
+from recipes.utils import create_paginator, edit_recipe, turn_on_tags
 
 User = get_user_model()
 
@@ -63,7 +62,7 @@ def recipe_view_slug(request, recipe_id, slug):
 def recipe_new(request):
     form = RecipeForm(request.POST or None, files=request.FILES or None)
     if form.is_valid():
-        recipe = save_recipe(request, form)
+        recipe = form.save()
 
         return redirect(
             'recipe_view_slug', recipe_id=recipe.id, slug=recipe.slug
@@ -88,7 +87,7 @@ def recipe_edit(request, recipe_id, slug):
         instance=recipe
     )
     if form.is_valid():
-        edit_recipe(request, form, instance=recipe)
+        edit_recipe(form, recipe)
         return redirect(
             'recipe_view_slug', recipe_id=recipe.id, slug=recipe.slug
         )

@@ -1,10 +1,8 @@
-from decimal import Decimal
-
 from django.core.paginator import Paginator
 from django.db import IntegrityError, transaction
 from django.http import HttpResponseBadRequest
 
-from .models import Ingredient, RecipeIngredient, Tag
+from .models import RecipeIngredient, Tag
 
 
 def get_ingredients(request):
@@ -19,34 +17,11 @@ def get_ingredients(request):
     return ingredients
 
 
-def save_recipe(request, form):
-    try:
-        with transaction.atomic():
-            form.instance.author = request.user
-            recipe = form.save()
-
-            objs = []
-            ingredients = get_ingredients(request)
-            for name, quantity in ingredients.items():
-                ingredient = Ingredient.objects.get(title=name)
-                objs.append(
-                    RecipeIngredient(
-                        recipe=recipe,
-                        ingredient=ingredient,
-                        quantity=Decimal(quantity.replace(',', '.'))
-                    )
-                )
-            RecipeIngredient.objects.bulk_create(objs)
-            return recipe
-    except IntegrityError:
-        raise HttpResponseBadRequest
-
-
-def edit_recipe(request, form, instance):
+def edit_recipe(form, instance):
     try:
         with transaction.atomic():
             RecipeIngredient.objects.filter(recipe=instance).delete()
-            return save_recipe(request, form)
+            return form.save()
     except IntegrityError:
         raise HttpResponseBadRequest
 
