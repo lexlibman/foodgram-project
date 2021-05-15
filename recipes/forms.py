@@ -1,4 +1,5 @@
 from django import forms
+from decimal import Decimal
 
 from .models import Ingredient, Recipe, RecipeIngredient
 
@@ -20,29 +21,35 @@ class RecipeForm(forms.ModelForm):
         }
 
     def clean(self):
-        known_ids = []
-        for items in self.data.keys():
-            if 'nameIngredient' in items:
-                name, num = items.split('_')
-                known_ids.append(num)
-        for num in known_ids:
-            title = self.data.get(f'nameIngredient_{num}'),
-            dimension = self.data.get(f'unitsIngredient_{num}')
+        ingredients = {}
+        for key, name in self.data.items():
+            if key.startswith('nameIngredient'):
+                num = key.split('_')[1]
+                ingredients[name] = self.data[
+                    f'valueIngredient_{num}'
+                ]
+        for name, quantity in ingredients.items():
             try:
-                self._objs.append(
-                    Ingredient.objects.filter(
-                        title=title[0],
-                        dimension=dimension,
-                    )
-                )
+                ingredient = Ingredient.objects.get(title=name)
             except Ingredient.DoesNotExist:
                 raise forms.ValidationError(
                     'Ингредиента нет в базе данных'
                 )
+            self._objs.append([ingredient, quantity])
 
     def save(self, commit=True):
         instance = super().save(commit=False)
         instance.save()
-        RecipeIngredient.objects.filter(recipe=instance).delete()
         self.save_m2m()
+        objs = []
+        for ingredient in self._objs:
+            objs.append(
+                RecipeIngredient(
+                    recipe=instance,
+                    ingredient=ingredient[0],
+                    quantity=Decimal(ingredient[1].replace(',', '.'))
+                )
+            )
+        RecipeIngredient.objects.filter(recipe=instance).delete()
+        RecipeIngredient.objects.bulk_create(objs)
         return instance
