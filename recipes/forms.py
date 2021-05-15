@@ -1,5 +1,6 @@
-from django import forms
 from decimal import Decimal
+
+from django import forms
 
 from .models import Ingredient, Recipe, RecipeIngredient
 
@@ -28,6 +29,10 @@ class RecipeForm(forms.ModelForm):
                 ingredients[name] = self.data[
                     f'valueIngredient_{num}'
                 ]
+        if not ingredients:
+            raise forms.ValidationError(
+                'Необходимо добавить хотя бы один ингредиент'
+            )
         for name, quantity in ingredients.items():
             try:
                 ingredient = Ingredient.objects.get(title=name)
@@ -50,5 +55,5 @@ class RecipeForm(forms.ModelForm):
                 )
             )
         RecipeIngredient.objects.filter(recipe=instance).delete()
-        self.save_m2m()
+        RecipeIngredient.objects.bulk_create(objs)
         return instance
