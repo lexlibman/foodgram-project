@@ -41,7 +41,5 @@ class RecipeForm(forms.ModelForm):
                 )
 
     def save(self, commit=True):
-        instance = RecipeIngredient.objects.bulk_create(self._objs)
-        if commit:
-            instance.save()
-        return instance
+        return RecipeIngredient.objects.bulk_create(self._objs)
+
