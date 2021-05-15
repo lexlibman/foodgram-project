@@ -44,5 +44,6 @@ class RecipeForm(forms.ModelForm):
         instance = super().save(commit=False)
         instance.save()
         self.save_m2m()
+        RecipeIngredient.objects.filter(recipe=instance).delete()
         RecipeIngredient.objects.bulk_create(self._objs)
         return instance
