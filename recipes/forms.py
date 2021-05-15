@@ -43,8 +43,7 @@ class RecipeForm(forms.ModelForm):
             self._objs.append([ingredient, quantity])
 
     def save(self, commit=True):
-        instance = super(RecipeForm, self).save(commit=False)
-        recipe = self.instance.save()
+        recipe = super(RecipeForm, self).save(commit=False)
         objs = []
         for ingredient, quantity in self._objs:
             objs.append(
@@ -57,5 +56,5 @@ class RecipeForm(forms.ModelForm):
         recipe.ingredients_amounts.all().delete()
         RecipeIngredient.objects.bulk_create(objs)
         if commit:
-            instance.save()
+            recipe.save()
         return recipe
