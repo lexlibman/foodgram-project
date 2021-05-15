@@ -4,6 +4,8 @@ from .models import Ingredient, Recipe, RecipeIngredient
 
 
 class RecipeForm(forms.ModelForm):
+    _objs = []
+
     class Meta:
         model = Recipe
         fields = (
