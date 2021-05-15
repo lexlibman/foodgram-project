@@ -44,17 +44,18 @@ class RecipeForm(forms.ModelForm):
 
     def save(self, commit=True):
         instance = super(RecipeForm, self).save(commit=False)
+        recipe = self.instance.save()
         objs = []
-        for ingredient in self._objs:
+        for ingredient, quantity in self._objs:
             objs.append(
                 RecipeIngredient(
-                    recipe=instance,
-                    ingredient=ingredient[0],
-                    quantity=Decimal(ingredient[1].replace(',', '.'))
+                    recipe=recipe,
+                    ingredient=ingredient,
+                    quantity=Decimal(quantity.replace(',', '.')),
                 )
             )
-        RecipeIngredient.objects.filter(recipe=instance).delete()
+        RecipeIngredient.objects.filter(recipe=recipe).delete()
         RecipeIngredient.objects.bulk_create(objs)
         if commit:
             instance.save()
-        return instance
+        return recipe
