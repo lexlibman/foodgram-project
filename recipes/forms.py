@@ -42,4 +42,3 @@ class RecipeForm(forms.ModelForm):
 
     def save(self, commit=True):
         return RecipeIngredient.objects.bulk_create(self._objs)
-
