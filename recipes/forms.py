@@ -45,14 +45,14 @@ class RecipeForm(forms.ModelForm):
         for title, quantity in self.ingredients.items():
             if quantity.get('quantity') < 0:
                 raise forms.ValidationError(
-                    f'Неверное количество для *{title}*'
+                    f'Неверное количество для {title}'
                 )
             try:
                 ingredient = Ingredient.objects.filter(title=title).get()
                 self.ingredients[title].update({'object': ingredient})
             except ObjectDoesNotExist:
                 raise forms.ValidationError(
-                    f'Ингредиента *{title}* нет в базе данных'
+                    f'Ингредиента {title} нет в базе данных'
                 )
         return super().clean()
 
