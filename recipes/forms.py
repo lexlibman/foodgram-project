@@ -1,13 +1,12 @@
 from decimal import Decimal
 
 from django import forms
+from django.core.exceptions import ObjectDoesNotExist
 
-from .models import Ingredient, Recipe, RecipeIngredient
+from recipes.models import Ingredient, Recipe, RecipeIngredient
 
 
 class RecipeForm(forms.ModelForm):
-    _objs = []
-
     class Meta:
         model = Recipe
         fields = (
@@ -21,40 +20,54 @@ class RecipeForm(forms.ModelForm):
             'tags': forms.CheckboxSelectMultiple(),
         }
 
-    def clean(self):
-        ingredients = {}
-        for key, name in self.data.items():
+    def __init__(self, data=None, *args, **kwargs):
+        self.ingredients = {}
+        if data is not None:
+            data = data.copy()
+            self.get_ingredients(data)
+
+        super().__init__(data=data, *args, **kwargs)
+
+    def get_ingredients(self, data):
+        for key, name in data.items():
             if key.startswith('nameIngredient'):
-                num = key.split('_')[1]
-                ingredients[name] = self.data[
-                    f'valueIngredient_{num}'
-                ]
-        if not ingredients:
+                _, _, number = key.partition('_')
+                value = f'valueIngredient_{number}'
+                self.ingredients[name] = {'quantity': int(data.get(value))}
+
+    def clean(self):
+        if not self.ingredients:
             raise forms.ValidationError(
                 'Необходимо добавить хотя бы один ингредиент'
             )
-        for name, quantity in ingredients.items():
-            try:
-                ingredient = Ingredient.objects.get(title=name)
-            except Ingredient.DoesNotExist:
+        for title, quantity in self.ingredients.items():
+            if quantity.get('quantity') < 0:
                 raise forms.ValidationError(
-                    'Ингредиента нет в базе данных'
+                    f'Неверное количество для {title}'
                 )
-            self._objs.append([ingredient, quantity])
+            try:
+                ingredient = Ingredient.objects.filter(title=title).get()
+                self.ingredients[title].update({'object': ingredient})
+            except ObjectDoesNotExist:
+                raise forms.ValidationError(
+                    f'Ингредиента {title} нет в базе данных'
+                )
+        return super().clean()
 
     def save(self, commit=True):
-        recipe = super(RecipeForm, self).save(commit=False)
-        objs = []
-        for ingredient, quantity in self._objs:
-            objs.append(
+        recipe = super().save(commit=False)
+        recipe.save()
+        objects = []
+        for data in self.ingredients.values():
+            objects.append(
                 RecipeIngredient(
                     recipe=recipe,
-                    ingredient=ingredient,
-                    quantity=Decimal(quantity.replace(',', '.')),
+                    ingredient=data.get('object'),
+                    quantity=Decimal(data.get('quantity').replace(',', '.')),
                 )
             )
-        recipe.ingredients_amounts.all().delete()
-        RecipeIngredient.objects.bulk_create(objs)
-        if commit:
-            recipe.save()
+        if objects:
+            recipe.ingredients_amounts.all().delete()
+            RecipeIngredient.objects.bulk_create(objects)
+        self.save_m2m()
         return recipe

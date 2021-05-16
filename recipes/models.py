@@ -103,11 +103,15 @@ class Recipe(models.Model):
 
 
 class RecipeIngredient(models.Model):
-    ingredient = models.ForeignKey(Ingredient, on_delete=models.CASCADE)
+    ingredient = models.ForeignKey(
+        Ingredient,
+        on_delete=models.CASCADE,
+        related_name='ingredients_amounts',
+    )
     recipe = models.ForeignKey(
         Recipe,
         on_delete=models.CASCADE,
-        related_name='ingredients_amounts'
+        related_name='ingredients_amounts',
     )
     quantity = models.DecimalField(
         max_digits=6,
@@ -115,7 +119,7 @@ class RecipeIngredient(models.Model):
         validators=[
             MinValueValidator(0.1, 'Начнем с 0.1'),
             MaxValueValidator(10000, 'Это слишком много')
-        ]
+        ],
     )
 
     class Meta:
