@@ -32,7 +32,7 @@ class RecipeForm(forms.ModelForm):
                 _, _, number = key.partition('_')
                 value = f'valueIngredient_{number}'
                 self.ingredients[name] = {
-                    'quantity': int(data.get(value).replace(',', '.'))
+                    'quantity': int(data.get(value))
                 }
 
     def clean(self):
