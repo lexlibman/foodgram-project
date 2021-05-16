@@ -1,5 +1,3 @@
-from decimal import Decimal
-
 from django import forms
 from django.core.exceptions import ObjectDoesNotExist
 
@@ -63,7 +61,7 @@ class RecipeForm(forms.ModelForm):
                 RecipeIngredient(
                     recipe=recipe,
                     ingredient=data.get('object'),
-                    quantity=Decimal(data.get('quantity').replace(',', '.')),
+                    quantity=data.get('quantity'),
                 )
             )
         if objects:
