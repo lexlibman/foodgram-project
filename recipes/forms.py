@@ -41,10 +41,6 @@ class RecipeForm(forms.ModelForm):
                 'Необходимо добавить хотя бы один ингредиент'
             )
         for title, quantity in self.ingredients.items():
-            if quantity.get('quantity') < 0:
-                raise forms.ValidationError(
-                    f'Неверное количество для {title}'
-                )
             try:
                 ingredient = Ingredient.objects.filter(title=title).get()
                 self.ingredients[title].update({'object': ingredient})
