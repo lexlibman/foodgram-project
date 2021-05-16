@@ -1,5 +1,3 @@
-from decimal import Decimal
-
 from django import forms
 from django.core.exceptions import ObjectDoesNotExist
 
@@ -34,7 +32,7 @@ class RecipeForm(forms.ModelForm):
                 _, _, number = key.partition('_')
                 value = f'valueIngredient_{number}'
                 self.ingredients[name] = {
-                    'quantity': int(Decimal(data.get(value)).replace(',', '.'))
+                    'quantity': int(data.get(value).replace(',', '.'))
                 }
 
     def clean(self):
