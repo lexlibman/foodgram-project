@@ -1,3 +1,5 @@
+from decimal import Decimal
+
 from django import forms
 from django.core.exceptions import ObjectDoesNotExist
 
@@ -31,7 +33,9 @@ class RecipeForm(forms.ModelForm):
             if key.startswith('nameIngredient'):
                 _, _, number = key.partition('_')
                 value = f'valueIngredient_{number}'
-                self.ingredients[name] = {'quantity': int(data.get(value))}
+                self.ingredients[name] = {
+                    'quantity': int(Decimal(data.get(value)).replace(',', '.'))
+                }
 
     def clean(self):
         if not self.ingredients:
