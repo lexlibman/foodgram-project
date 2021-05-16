@@ -50,7 +50,7 @@ class RecipeForm(forms.ModelForm):
                 self.ingredients[title].update({'object': ingredient})
             except ObjectDoesNotExist:
                 raise forms.ValidationError(
-                    f'Ингредиента *{title}* нет в базе данных'
+                    f'Ингредиента {title} нет в базе данных'
                 )
         return super().clean()
 
