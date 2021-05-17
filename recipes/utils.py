@@ -11,7 +11,7 @@ def create_paginator(request, template, context, items_list):
     if page_number and int(page_number) > paginator.num_pages:
         url = request.build_absolute_uri(
             '?'
-        ) + "?page=" + str(paginator.num_pages)
+        ) + turn_on_tags() + "&page=" + str(paginator.num_pages)
         return redirect(url)
     context['page'] = paginator.get_page(page_number)
     return render(request, template, context)
