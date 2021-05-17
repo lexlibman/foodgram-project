@@ -7,7 +7,7 @@ from django.urls import reverse
 
 from recipes.forms import RecipeForm
 from recipes.models import Recipe
-from recipes.utils import paginator_manager, turn_on_tags
+from recipes.utils import create_paginator, turn_on_tags
 
 User = get_user_model()
 
@@ -25,7 +25,7 @@ def index(request):
     )
     context = {}
 
-    return paginator_manager(
+    return create_paginator(
         request,
         'recipes/index.html',
         context,
@@ -116,7 +116,7 @@ def profile_view(request, username):
     )
     context = {'author': author}
 
-    return paginator_manager(
+    return create_paginator(
         request,
         'recipes/authorRecipe.html',
         context,
@@ -133,7 +133,7 @@ def subscriptions(request):
     ).annotate(recipe_count=Count('recipes')).order_by('username')
     context = {}
 
-    return paginator_manager(
+    return create_paginator(
         request,
         'recipes/myFollow.html',
         context,
@@ -156,7 +156,7 @@ def favorites(request):
     )
     context = {}
 
-    return paginator_manager(
+    return create_paginator(
         request,
         'recipes/favorite.html',
         context,
