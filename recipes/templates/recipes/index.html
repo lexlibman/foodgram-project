@@ -12,7 +12,7 @@
     {% include "includes/name.html" with name="Рецепты" include_tags=True %}
   <div class="card-list">
     {% for recipe in page %}
-      {% include 'includes/recipeCard.html' with recipe=recipe %}
+      {% include 'includes/recipeCard.html' %}
     {% endfor %}
   </div>
 

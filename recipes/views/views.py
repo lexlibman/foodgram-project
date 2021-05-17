@@ -41,7 +41,11 @@ def recipe_view_redirect(request, recipe_id):
 
 def recipe_view_slug(request, recipe_id, slug):
     recipe = get_object_or_404(
-        Recipe.objects.select_related('author'),
+        Recipe.objects.get_additional_attributes(
+            request.user,
+        ).distinct().select_related(
+            'author'
+        ),
         id=recipe_id,
         slug=slug
     )
