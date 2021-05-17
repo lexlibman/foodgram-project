@@ -19,10 +19,8 @@ def index(request):
 
     recipes = Recipe.objects.get_additional_attributes(
         request.user,
-        tags
-    ).distinct().select_related(
-        'author'
-    )
+        tags,
+    ).distinct().select_related('author')
     context = {}
 
     return create_paginator(
@@ -34,7 +32,12 @@ def index(request):
 
 
 def recipe_view_redirect(request, recipe_id):
-    recipe = get_object_or_404(Recipe.objects.all(), id=recipe_id)
+    recipe = get_object_or_404(
+        Recipe.objects.get_additional_attributes(
+            request.user
+        ).distinct().select_related('author'),
+        id=recipe_id,
+    )
 
     return redirect('recipe_view_slug', recipe_id=recipe.id, slug=recipe.slug)
 
@@ -42,12 +45,10 @@ def recipe_view_redirect(request, recipe_id):
 def recipe_view_slug(request, recipe_id, slug):
     recipe = get_object_or_404(
         Recipe.objects.get_additional_attributes(
-            request.user,
-        ).distinct().select_related(
-            'author'
-        ),
+            request.user
+        ).distinct().select_related('author'),
         id=recipe_id,
-        slug=slug
+        slug=slug,
     )
 
     return render(request, 'recipes/singlePage.html', {'recipe': recipe})
